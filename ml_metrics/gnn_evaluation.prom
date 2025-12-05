@@ -1,0 +1,10 @@
+# TYPE accuracy gauge
+accuracy 5.263157894736842
+# TYPE f1_score gauge
+f1_score 0.6578947368421052
+# TYPE precision gauge
+precision 0.3508771929824561
+# TYPE recall gauge
+recall 5.263157894736842
+# TYPE step gauge
+step 0

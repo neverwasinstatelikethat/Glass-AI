@@ -1,0 +1,206 @@
+services:
+  # Apache Kafka для стриминга данных
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: glass_zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - glass_network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: glass_kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - glass_network
+
+  # InfluxDB для временных рядов
+  influxdb:
+    image: influxdb:2.7
+    container_name: glass_influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: adminpass123
+      DOCKER_INFLUXDB_INIT_ORG: glass_factory
+      DOCKER_INFLUXDB_INIT_BUCKET: sensors
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: my-super-secret-auth-token
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - glass_network
+
+  # PostgreSQL для метаданных
+  postgres:
+    image: postgres:15
+    container_name: glass_postgres
+    environment:
+      POSTGRES_DB: glass_production
+      POSTGRES_USER: glass_admin
+      POSTGRES_PASSWORD: glass_secure_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - glass_network
+
+  # Redis для кэширования
+  redis:
+    image: redis:7-alpine
+    container_name: glass_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - glass_network
+
+  # Neo4j для Knowledge Graph
+  neo4j:
+    image: neo4j:5.13
+    container_name: glass_neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/neo4jpassword
+      NEO4J_dbms_memory_pagecache_size: 1G
+      NEO4J_dbms_memory_heap_max__size: 2G
+    volumes:
+      - neo4j_data:/data
+    networks:
+      - glass_network
+
+  # MinIO (S3-совместимое хранилище)
+  minio:
+    image: minio/minio:latest
+    container_name: glass_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - glass_network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: glass_backend
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      INFLUXDB_URL: http://influxdb:8086
+      INFLUXDB_TOKEN: my-super-secret-auth-token
+      INFLUXDB_ORG: glass_factory
+      INFLUXDB_BUCKET: sensors
+      POSTGRES_URL: postgresql://glass_admin:glass_secure_pass@postgres:5432/glass_production
+      REDIS_URL: redis://redis:6379
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: neo4jpassword
+    depends_on:
+      - kafka
+      - influxdb
+      - postgres
+      - redis
+      - neo4j
+    volumes:
+      - .:/app
+    working_dir: /app
+    networks:
+      - glass_network
+    command: uvicorn backend.fastapi_backend:app --host 0.0.0.0 --port 8000 --reload --reload-dir backend --reload-dir data_ingestion --reload-dir industrial_connectors
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: glass_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8000
+      REACT_APP_WS_URL: ws://localhost:8000
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - glass_network
+
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: glass_mosquitto
+    ports:
+      - "1883:1883"
+      - "9003:9001"
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_logs:/mosquitto/log
+    networks:
+      - glass_network
+
+  # OPC UA Server Simulation
+  opcua_server:
+    image: open62541/open62541:latest
+    container_name: glass_opcua_server
+    ports:
+      - "4840:4840"
+    networks:
+      - glass_network
+
+  # Modbus Server Simulation - Using a reliable public image
+  modbus_server:
+    image: oitc/modbus-server:latest
+    container_name: glass_modbus_server
+    ports:
+      - "5020:5020"
+    networks:
+      - glass_network
+
+networks:
+  glass_network:
+    driver: bridge
+
+volumes:
+  influxdb_data:
+  postgres_data:
+  redis_data:
+  neo4j_data:
+  minio_data:
+  mosquitto_data:
+  mosquitto_logs:
+  opcua_data:
+  modbus_data:

@@ -1,0 +1,10 @@
+# TYPE mse gauge
+mse 0.15688881278038025
+# TYPE mae gauge
+mae 0.38217005133628845
+# TYPE rmse gauge
+rmse 0.39609193801879883
+# TYPE r2_score gauge
+r2_score -13.996207237243652
+# TYPE step gauge
+step 0

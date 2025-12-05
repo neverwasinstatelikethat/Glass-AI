@@ -1,0 +1,28 @@
+# Data Ingestion System Requirements
+
+# Core dependencies
+asyncua>=1.0.0          # OPC UA client
+pymodbus>=3.0.0         # Modbus protocol support
+opencv-python>=4.8.0    # Computer vision for camera streams
+aiomqtt>=1.0.0          # Async MQTT client
+aiokafka>=0.8.0         # Async Kafka client
+aiohttp>=3.8.0          # Async HTTP client
+numpy>=1.24.0           # Numerical computing
+scipy>=1.11.0           # Scientific computing
+
+# Optional dependencies
+pyserial>=3.5           # Serial communication (for Modbus RTU)
+paho-mqtt>=1.6.1        # Alternative MQTT client
+pyjwt>=2.8.0            # JWT for secure connections
+cryptography>=41.0.0    # Cryptographic support
+
+# Development dependencies
+pytest>=7.4.0           # Testing framework
+pytest-asyncio>=0.21.0  # Async support for pytest
+black>=23.0.0           # Code formatting
+flake8>=6.0.0           # Code linting
+mypy>=1.5.0             # Type checking
+
+# Monitoring and logging
+prometheus-client>=0.17.0  # Prometheus metrics
+structlog>=23.1.0          # Structured logging

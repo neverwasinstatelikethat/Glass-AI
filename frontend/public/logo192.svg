@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="glassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00579c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00367d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Glass shape -->
+  <path d="M40 30 L152 30 Q162 30 162 40 L162 152 Q162 162 152 162 L40 162 Q30 162 30 152 L30 40 Q30 30 40 30 Z" 
+        fill="url(#glassGradient)" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- Liquid inside -->
+  <path d="M45 45 L147 45 Q152 45 152 50 L152 147 Q152 152 147 152 L45 152 Q40 152 40 147 L40 50 Q40 45 45 45 Z" 
+        fill="#4caf50" opacity="0.7"/>
+  
+  <!-- Bubbles -->
+  <circle cx="70" cy="70" r="5" fill="#ffffff" opacity="0.8"/>
+  <circle cx="120" cy="90" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="90" cy="120" r="4" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- Analytics graph -->
+  <polyline points="60,130 80,110 100,120 120,100 140,110" 
+            fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Data points -->
+  <circle cx="60" cy="130" r="3" fill="#ffffff"/>
+  <circle cx="80" cy="110" r="3" fill="#ffffff"/>
+  <circle cx="100" cy="120" r="3" fill="#ffffff"/>
+  <circle cx="120" cy="100" r="3" fill="#ffffff"/>
+  <circle cx="140" cy="110" r="3" fill="#ffffff"/>
+</svg>

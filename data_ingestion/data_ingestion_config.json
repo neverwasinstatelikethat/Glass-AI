@@ -1,0 +1,84 @@
+{
+  "system": {
+    "name": "GlassProductionDataIngestion",
+    "version": "1.0.0",
+    "environment": "development"
+  },
+  "collector": {
+    "collection_interval": 1.0,
+    "buffer_size": 1000,
+    "sources": {
+      "opc_ua": {
+        "enabled": true,
+        "server_url": "opc.tcp://localhost:4840",
+        "namespace": "http://glass.factory/UA/",
+        "timeout": 5.0
+      },
+      "modbus": {
+        "enabled": true,
+        "protocol": "tcp",
+        "host": "localhost",
+        "port": 5020,
+        "timeout": 3.0
+      },
+      "mik1_camera": {
+        "enabled": true,
+        "camera_source": "0",
+        "resolution": [1920, 1080],
+        "fps": 30
+      },
+      "mqtt": {
+        "enabled": true,
+        "broker_host": "localhost",
+        "broker_port": 1883,
+        "client_id": "glass_production_collector",
+        "keepalive": 60
+      }
+    }
+  },
+  "router": {
+    "default_routes": ["kafka", "feature_extractor", "validator"],
+    "routing_rules": {
+      "sensor_data": ["kafka", "feature_extractor", "validator", "rest_api"],
+      "defect_data": ["kafka", "validator", "rest_api"],
+      "image_data": ["kafka", "buffer"],
+      "control_data": ["kafka", "websocket"],
+      "alarm_data": ["kafka", "websocket", "database"],
+      "quality_data": ["kafka", "feature_extractor", "database"],
+      "prediction_data": ["kafka", "websocket"],
+      "recommendation_data": ["kafka", "websocket"]
+    }
+  },
+  "kafka": {
+    "bootstrap_servers": ["localhost:9093"],
+    "enable_idempotence": true,
+    "compression_type": "gzip",
+    "topics": {
+      "sensors_raw": "glass.sensors.raw",
+      "sensors_processed": "glass.sensors.processed",
+      "defects": "glass.defects",
+      "predictions": "glass.predictions",
+      "alerts": "glass.alerts",
+      "recommendations": "glass.recommendations",
+      "quality_metrics": "glass.quality.metrics"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_logging": {
+      "enabled": true,
+      "file_path": "logs/data_ingestion.log",
+      "max_size_mb": 10,
+      "backup_count": 5
+    }
+  },
+  "monitoring": {
+    "health_check_interval": 30,
+    "metrics_export": {
+      "enabled": true,
+      "port": 8001,
+      "endpoint": "/metrics"
+    }
+  }
+}
