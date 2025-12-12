@@ -256,7 +256,6 @@ docker-compose down -v
 - [Объяснимость](explainability/README_RU.md)
 - [Промышленные коннекторы](industrial_connectors/README_RU.md)
 - [Вывод](inference/README_RU.md)
-- [Интеграция](integration/README_RU.md)
 - [Хранилище](storage/README_RU.md)
 - [Бэкенд](backend/README_RU.md)
 - [Фронтенд](frontend/README_RU.md)
