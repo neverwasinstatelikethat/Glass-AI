@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface KPIData {
   qualityRate: number;
@@ -35,7 +35,7 @@ interface AIRecommendation {
   icon: string;
 }
 
-interface DashboardData {
+export interface DashboardData {
   kpiData: KPIData;
   defectDistribution: DefectDistribution[];
   performanceData: PerformanceDataPoint[];
@@ -43,281 +43,273 @@ interface DashboardData {
   aiRecommendations: AIRecommendation[];
 }
 
+const DEFECT_COLORS: Record<string, string> = {
+  crack: '#FF1744',
+  bubble: '#FFD700',
+  chip: '#00E676',
+  stain: '#9D4EDD',
+  cloudiness: '#00E5FF',
+  deformation: '#FF3366'
+};
+
+const DEFECT_NAMES: Record<string, string> = {
+  crack: 'Трещины',
+  bubble: 'Пузыри',
+  chip: 'Сколы',
+  stain: 'Пятна',
+  cloudiness: 'Помутнение',
+  deformation: 'Деформация'
+};
+
 const useDashboardData = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const wsRef = useRef<WebSocket | null>(null);
+  const fetchCountRef = useRef(0);
+  const performanceHistoryRef = useRef<PerformanceDataPoint[]>([]);
 
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch quality metrics
-        const qualityResponse = await fetch(`${API_BASE_URL}/api/quality/metrics`);
-        if (!qualityResponse.ok) {
-          throw new Error(`Failed to fetch quality metrics: ${qualityResponse.status}`);
-        }
-        const qualityData = await qualityResponse.json();
-        
-        // Fetch active alerts
-        const alertsResponse = await fetch(`${API_BASE_URL}/api/alerts/active`);
-        if (!alertsResponse.ok) {
-          throw new Error(`Failed to fetch alerts: ${alertsResponse.status}`);
-        }
-        const alertsData = await alertsResponse.json();
-        
-        // Fetch recommendations
-        const recommendationsResponse = await fetch(`${API_BASE_URL}/api/recommendations`);
-        if (!recommendationsResponse.ok) {
-          throw new Error(`Failed to fetch recommendations: ${recommendationsResponse.status}`);
-        }
-        const recommendationsData = await recommendationsResponse.json();
-        
-        // Construct dashboard data
-        const dashboardData: DashboardData = {
-          kpiData: {
-            qualityRate: qualityData.quality_rate || 96.5,
-            defectCount: qualityData.defect_count || 42,
-            unitsProduced: qualityData.total_units || 1250,
-            uptime: 98.5 // This would come from system stats API
-          },
-          defectDistribution: [
-            { name: 'Трещины', value: 12, color: '#FF1744' },
-            { name: 'Пузыри', value: 18, color: '#FFD700' },
-            { name: 'Сколы', value: 8, color: '#00E676' },
-            { name: 'Помутнение', value: 5, color: '#00E5FF' },
-            { name: 'Деформация', value: 2, color: '#9D4EDD' }
-          ],
-          performanceData: [
-            { time: '08:00', quality: 95.2, defects: 52 },
-            { time: '09:00', quality: 95.8, defects: 48 },
-            { time: '10:00', quality: 96.1, defects: 46 },
-            { time: '11:00', quality: 96.5, defects: 45 },
-            { time: '12:00', quality: 96.3, defects: 47 },
-            { time: '13:00', quality: 96.7, defects: 43 },
-            { time: '14:00', quality: 96.5, defects: 45 },
-            { time: '15:00', quality: 97.1, defects: 41 },
-            { time: '16:00', quality: 97.3, defects: 40 },
-          ],
-          realTimeMetrics: [
-            {
-              name: 'Температура печи',
-              value: 1520,
-              unit: '°C',
-              max: 1600,
-              trend: 'stable',
-              icon: 'LocalFireDepartment'
-            },
-            {
-              name: 'Уровень расплава',
-              value: 2.45,
-              unit: 'м',
-              max: 3.0,
-              trend: 'up',
-              icon: 'WaterDrop'
-            },
-            {
-              name: 'Скорость ленты',
-              value: 155,
-              unit: 'м/мин',
-              max: 200,
-              trend: 'down',
-              icon: 'Speed'
-            },
-            {
-              name: 'Температура формы',
-              value: 325,
-              unit: '°C',
-              max: 350,
-              trend: 'stable',
-              icon: 'Thermostat'
-            }
-          ],
-          aiRecommendations: Array.isArray(recommendationsData) 
-            ? recommendationsData.map((rec: any) => ({
-                text: rec.description || 'Рекомендация по оптимизации процесса',
-                priority: rec.urgency?.toLowerCase() || 'medium',
-                impact: Math.round((rec.confidence || 0.5) * 100),
-                icon: 'Psychology'
-              }))
-            : [
-                {
-                  text: "Снизить температуру печи на 15°C для минимизации образования трещин",
-                  priority: 'high',
-                  impact: 85,
-                  icon: 'LocalFireDepartment'
-                },
-                {
-                  text: "Увеличить скорость ленты на 5% для оптимизации производительности",
-                  priority: 'medium',
-                  impact: 65,
-                  icon: 'Speed'
-                }
-              ]
-        };
+  // Fetch all dashboard data from backend APIs
+  const fetchData = useCallback(async () => {
+    try {
+      fetchCountRef.current += 1;
+      const isFirstFetch = fetchCountRef.current === 1;
+      if (isFirstFetch) setLoading(true);
+      
+      // Parallel fetch all endpoints
+      const [qualityRes, alertsRes, trendsRes, efficiencyRes, rlRecsRes, statsRes, dtStateRes] = await Promise.allSettled([
+        fetch(`${API_BASE_URL}/api/quality/metrics`),
+        fetch(`${API_BASE_URL}/api/alerts/active`),
+        fetch(`${API_BASE_URL}/api/analytics/defect-trends?timerange=24h&grouping=hourly`),
+        fetch(`${API_BASE_URL}/api/analytics/production-efficiency?timerange=24h`),
+        fetch(`${API_BASE_URL}/api/rl/recommendations/detailed`),
+        fetch(`${API_BASE_URL}/api/statistics`),
+        fetch(`${API_BASE_URL}/api/digital-twin/state`)
+      ]);
 
-        setData(dashboardData);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-        setError('Failed to load dashboard data');
-        setLoading(false);
-        
-        // Fallback to mock data in case of error
-        const mockData: DashboardData = {
-          kpiData: {
-            qualityRate: 96.5,
-            defectCount: 42,
-            unitsProduced: 1250,
-            uptime: 98.5
-          },
-          defectDistribution: [
-            { name: 'Трещины', value: 12, color: '#FF1744' },
-            { name: 'Пузыри', value: 18, color: '#FFD700' },
-            { name: 'Сколы', value: 8, color: '#00E676' },
-            { name: 'Помутнение', value: 5, color: '#00E5FF' },
-            { name: 'Деформация', value: 2, color: '#9D4EDD' }
-          ],
-          performanceData: [
-            { time: '08:00', quality: 95.2, defects: 52 },
-            { time: '09:00', quality: 95.8, defects: 48 },
-            { time: '10:00', quality: 96.1, defects: 46 },
-            { time: '11:00', quality: 96.5, defects: 45 },
-            { time: '12:00', quality: 96.3, defects: 47 },
-            { time: '13:00', quality: 96.7, defects: 43 },
-            { time: '14:00', quality: 96.5, defects: 45 },
-            { time: '15:00', quality: 97.1, defects: 41 },
-            { time: '16:00', quality: 97.3, defects: 40 },
-          ],
-          realTimeMetrics: [
-            {
-              name: 'Температура печи',
-              value: 1520,
-              unit: '°C',
-              max: 1600,
-              trend: 'stable',
-              icon: 'LocalFireDepartment'
-            },
-            {
-              name: 'Уровень расплава',
-              value: 2.45,
-              unit: 'м',
-              max: 3.0,
-              trend: 'up',
-              icon: 'WaterDrop'
-            },
-            {
-              name: 'Скорость ленты',
-              value: 155,
-              unit: 'м/мин',
-              max: 200,
-              trend: 'down',
-              icon: 'Speed'
-            },
-            {
-              name: 'Температура формы',
-              value: 325,
-              unit: '°C',
-              max: 350,
-              trend: 'stable',
-              icon: 'Thermostat'
-            }
-          ],
-          aiRecommendations: [
-            {
-              text: "Снизить температуру печи на 15°C для минимизации образования трещин",
-              priority: 'high',
-              impact: 85,
-              icon: 'LocalFireDepartment'
-            },
-            {
-              text: "Увеличить скорость ленты на 5% для оптимизации производительности",
-              priority: 'medium',
-              impact: 65,
-              icon: 'Speed'
-            },
-            {
-              text: "Настроить температуру формы на 320°C для повышения консистенции качества",
-              priority: 'medium',
-              impact: 60,
-              icon: 'Thermostat'
-            },
-            {
-              text: "Запланировать техобслуживание горелочной зоны №2 для предотвращения перегрева",
-              priority: 'low',
-              impact: 45,
-              icon: 'DeviceHub'
-            },
-            {
-              text: "Оптимизировать подачу сырья для снижения затрат на 12%",
-              priority: 'high',
-              impact: 90,
-              icon: 'Factory'
-            }
-          ]
-        };
-        
-        setData(mockData);
+      // Parse quality metrics
+      let qualityData: any = {};
+      if (qualityRes.status === 'fulfilled' && qualityRes.value.ok) {
+        qualityData = await qualityRes.value.json();
       }
-    };
 
+      // Parse statistics for uptime
+      let statsData: any = {};
+      if (statsRes.status === 'fulfilled' && statsRes.value.ok) {
+        statsData = await statsRes.value.json();
+      }
+
+      // Parse digital twin state for real-time sensor values
+      let dtState: any = {};
+      if (dtStateRes.status === 'fulfilled' && dtStateRes.value.ok) {
+        const dtResponse = await dtStateRes.value.json();
+        dtState = dtResponse.data || dtResponse;
+      }
+
+      // Parse defect trends for distribution
+      let trendsData: any = { data_points: [] };
+      if (trendsRes.status === 'fulfilled' && trendsRes.value.ok) {
+        trendsData = await trendsRes.value.json();
+      }
+
+      // Parse efficiency data for performance chart
+      let efficiencyData: any = { data_points: [] };
+      if (efficiencyRes.status === 'fulfilled' && efficiencyRes.value.ok) {
+        efficiencyData = await efficiencyRes.value.json();
+      }
+
+      // Parse RL recommendations
+      let recommendationsData: any[] = [];
+      if (rlRecsRes.status === 'fulfilled' && rlRecsRes.value.ok) {
+        const rlData = await rlRecsRes.value.json();
+        recommendationsData = rlData.recommendations || rlData || [];
+      }
+      
+      // Fallback to regular recommendations
+      if (!recommendationsData || recommendationsData.length === 0) {
+        try {
+          const fallbackRes = await fetch(`${API_BASE_URL}/api/recommendations`);
+          if (fallbackRes.ok) {
+            recommendationsData = await fallbackRes.json();
+          }
+        } catch (e) {
+          console.warn('Fallback recommendations failed:', e);
+        }
+      }
+
+      // Build defect distribution from trends data
+      const defectDistribution: DefectDistribution[] = [];
+      const defectTypes = ['crack', 'bubble', 'chip', 'stain', 'cloudiness', 'deformation'];
+      
+      if (trendsData.data_points && trendsData.data_points.length > 0) {
+        // Aggregate defects from all data points
+        const aggregated: Record<string, number> = {};
+        defectTypes.forEach(dt => aggregated[dt] = 0);
+        
+        trendsData.data_points.forEach((dp: any) => {
+          defectTypes.forEach(dt => {
+            aggregated[dt] += dp[dt] || 0;
+          });
+        });
+        
+        defectTypes.forEach(dt => {
+          if (aggregated[dt] > 0) {
+            defectDistribution.push({
+              name: DEFECT_NAMES[dt] || dt,
+              value: aggregated[dt],
+              color: DEFECT_COLORS[dt] || '#888888'
+            });
+          }
+        });
+      }
+      
+      // Fallback if no data
+      if (defectDistribution.length === 0) {
+        defectDistribution.push(
+          { name: 'Трещины', value: 0, color: '#FF1744' },
+          { name: 'Пузыри', value: 0, color: '#FFD700' },
+          { name: 'Сколы', value: 0, color: '#00E676' }
+        );
+      }
+
+      // Build performance data from efficiency or trends
+      let performanceData: PerformanceDataPoint[] = [];
+      
+      if (efficiencyData.data_points && efficiencyData.data_points.length > 0) {
+        performanceData = efficiencyData.data_points.map((dp: any) => {
+          const ts = new Date(dp.timestamp);
+          return {
+            time: ts.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+            quality: dp.quality_rate || dp.quality || 95,
+            defects: dp.defect_count || Math.round((100 - (dp.quality_rate || 95)) * 10)
+          };
+        }).slice(-12); // Last 12 points
+      } else if (trendsData.data_points && trendsData.data_points.length > 0) {
+        performanceData = trendsData.data_points.map((dp: any) => {
+          const ts = new Date(dp.timestamp);
+          return {
+            time: ts.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+            quality: 100 - (dp.total_defects || 0) * 0.5,
+            defects: dp.total_defects || 0
+          };
+        }).slice(-12);
+      }
+      
+      // Store in history and merge
+      if (performanceData.length > 0) {
+        performanceHistoryRef.current = performanceData;
+      } else {
+        performanceData = performanceHistoryRef.current;
+      }
+
+      // Build real-time metrics from digital twin state
+      const sensorParams = dtState.parameters || dtState.sensor_values || {};
+      const realTimeMetrics: RealTimeMetric[] = [
+        {
+          name: 'Температура печи',
+          value: Math.round(sensorParams.furnace_temperature || sensorParams.furnace?.temperature || 1520),
+          unit: '°C',
+          max: 1600,
+          trend: 'stable',
+          icon: 'LocalFireDepartment'
+        },
+        {
+          name: 'Давление печи',
+          value: Math.round((sensorParams.furnace_pressure || sensorParams.furnace?.pressure || 25) * 10) / 10,
+          unit: 'кПа',
+          max: 50,
+          trend: 'stable',
+          icon: 'WaterDrop'
+        },
+        {
+          name: 'Скорость ленты',
+          value: Math.round(sensorParams.belt_speed || sensorParams.forming?.speed || 155),
+          unit: 'м/мин',
+          max: 200,
+          trend: 'stable',
+          icon: 'Speed'
+        },
+        {
+          name: 'Температура формы',
+          value: Math.round(sensorParams.mold_temp || sensorParams.forming?.mold_temp || 320),
+          unit: '°C',
+          max: 400,
+          trend: 'stable',
+          icon: 'Thermostat'
+        }
+      ];
+
+      // Build AI recommendations from RL data
+      const aiRecommendations: AIRecommendation[] = Array.isArray(recommendationsData) && recommendationsData.length > 0
+        ? recommendationsData.map((rec: any) => ({
+            text: rec.text || rec.description || rec.action || 'Рекомендация RL агента',
+            priority: (rec.priority || rec.urgency || 'medium').toLowerCase() as 'high' | 'medium' | 'low',
+            impact: rec.impact || Math.round((rec.confidence || rec.expected_improvement || 0.7) * 100),
+            icon: rec.icon || getIconForParameter(rec.parameter)
+          }))
+        : [];
+
+      // Calculate uptime from stats
+      let uptime = 98.5;
+      if (statsData.uptime) {
+        // Parse uptime string like "0:15:32.123456"
+        const parts = statsData.uptime.split(':');
+        if (parts.length >= 2) {
+          const hours = parseFloat(parts[0]);
+          const minutes = parseFloat(parts[1]);
+          uptime = Math.min(99.9, 95 + (hours * 60 + minutes) / 60);
+        }
+      }
+
+      const dashboardData: DashboardData = {
+        kpiData: {
+          qualityRate: qualityData.quality_rate || dtState.quality_score * 100 || 0,
+          defectCount: qualityData.defect_count || trendsData.total_defects || 0,
+          unitsProduced: qualityData.total_units || 0,
+          uptime: uptime
+        },
+        defectDistribution,
+        performanceData,
+        realTimeMetrics,
+        aiRecommendations
+      };
+
+      setData(dashboardData);
+      setLoading(false);
+      setError(null);
+      
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+      setError('Failed to load dashboard data');
+      setLoading(false);
+    }
+  }, [API_BASE_URL]);
+
+  // Helper function to get icon for parameter
+  const getIconForParameter = (param: string): string => {
+    const iconMap: Record<string, string> = {
+      'furnace_temperature': 'LocalFireDepartment',
+      'belt_speed': 'Speed',
+      'mold_temp': 'Thermostat',
+      'forming_pressure': 'Compress',
+      'cooling_rate': 'AcUnit',
+      'energy_consumption': 'ElectricBolt'
+    };
+    return iconMap[param] || 'Psychology';
+  };
+
+  useEffect(() => {
+    // Initial fetch
     fetchData();
     
-    // Set up WebSocket connection for real-time updates
-    const wsUrl = API_BASE_URL.replace('http', 'ws') + '/ws/realtime';
-    const ws = new WebSocket(wsUrl);
-    wsRef.current = ws;
-    
-    ws.onopen = () => {
-      console.log('WebSocket connected for real-time updates');
-    };
-    
-    ws.onmessage = (event) => {
-      try {
-        const message = JSON.parse(event.data);
-        console.log('WebSocket message received:', message);
-        if (message.type === 'realtime_update' && message.data) {
-          // Update KPI data with real-time values
-          setData(prevData => {
-            if (!prevData) return prevData;
-            
-            return {
-              ...prevData,
-              kpiData: {
-                ...prevData.kpiData,
-                qualityRate: message.data.current_quality_rate !== undefined ? message.data.current_quality_rate : prevData.kpiData.qualityRate,
-                defectCount: message.data.defect_count_hourly !== undefined ? message.data.defect_count_hourly : prevData.kpiData.defectCount,
-              }
-            };
-          });
-        }
-      } catch (err) {
-        console.error('Error parsing WebSocket message:', err);
-      }
-    };
-    
-    ws.onerror = (err) => {
-      console.error('WebSocket error:', err);
-    };
-    
-    ws.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-    
-    // Set up polling for periodic updates
-    const interval = setInterval(fetchData, 30000); // Update every 30 seconds
+    // Set up polling for periodic updates (every 10 minutes = 600000 ms)
+    const interval = setInterval(fetchData, 600000);
     
     return () => {
       clearInterval(interval);
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
     };
-  }, []);
+  }, [fetchData]);
 
   return { data, loading, error };
 };

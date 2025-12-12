@@ -1,0 +1,1071 @@
+{
+  "total_episodes": 150,
+  "total_steps": 30000,
+  "best_reward": 769.4670399610519,
+  "avg_rewards": [
+    432.93999999999915,
+    769.4670399610519,
+    375.0718022333186,
+    316.43033842966645,
+    338.5998072985564,
+    379.3217531059167,
+    461.2090800851971,
+    412.6169906419595,
+    395.1403943233865,
+    298.882686989755,
+    451.2532628766708,
+    343.0276360549711,
+    453.62897801610296,
+    405.8038917466934,
+    386.4441096619604,
+    417.8408129521953,
+    387.1829846441936,
+    406.4902512341765,
+    314.7811042096343,
+    431.9230227555618,
+    495.53751041890524,
+    323.4646995853392,
+    327.04513813801765,
+    316.98850472916047,
+    407.4376744185045,
+    387.3219987921372,
+    395.8638044610552,
+    412.5561669895308,
+    429.480212218384,
+    420.2201651690037,
+    414.8538669907658,
+    423.3755676554544,
+    307.3957012131802,
+    364.30580202272046,
+    393.8652963269858,
+    319.70153684370285,
+    346.35787673287217,
+    309.15900908574025,
+    413.0307149484043,
+    380.72725782276615,
+    446.91009799829925,
+    398.22159791715495,
+    369.49866997316883,
+    368.58907381157456,
+    318.65571245578275,
+    303.89546606587993,
+    394.72674034885677,
+    365.7863237657397,
+    417.3634641503963,
+    430.0205205002038,
+    286.97421760487214,
+    443.18570495139915,
+    277.7636275737111,
+    340.6276555228905,
+    445.2002428607417,
+    376.6720838510713,
+    351.0602307066084,
+    335.07406789641897,
+    417.3026057364104,
+    308.83769258938025,
+    473.80205825115024,
+    428.9535844653357,
+    361.118784009347,
+    351.3157146964097,
+    398.93894714159467,
+    288.55261729660475,
+    383.9390762378419,
+    266.3391982918955,
+    292.06013697372936,
+    288.59755507739857,
+    489.4787691055759,
+    484.7527252774795,
+    288.2428751314648,
+    324.8753507774522,
+    310.2220770719611,
+    403.3491016343428,
+    339.4619039184838,
+    348.54704506889766,
+    282.2085142972286,
+    437.5644638746596,
+    430.71932938848875,
+    345.75001920327617,
+    383.86061094897536,
+    408.9697023728723,
+    320.4360897302548,
+    324.7558191787467,
+    362.1510843931336,
+    475.900862196284,
+    300.67170476929107,
+    313.2956859400332,
+    315.3933763850954,
+    297.38754109972206,
+    336.50366745189007,
+    449.30873304536067,
+    328.99611820857535,
+    340.58406438321975,
+    417.61853964710787,
+    444.042956443917,
+    309.07320972357326,
+    401.0628625505941,
+    414.90876042094345,
+    309.16851564246406,
+    325.6796988966682,
+    370.2712371788174,
+    288.76159382695187,
+    411.0267563551194,
+    442.06552409235064,
+    337.43369983948196,
+    292.2485745343563,
+    374.63435559949215,
+    326.6469734797126,
+    375.3713854339683,
+    336.9163447359494,
+    323.0133753690362,
+    328.3369754677728,
+    357.90614540872974,
+    330.40793767526566,
+    425.0314222482106,
+    373.30571958380386,
+    367.9078627704666,
+    330.1268325797932,
+    346.4069727856976,
+    302.5867162574086,
+    382.31150920514636,
+    275.11250277067546,
+    324.99765463009373,
+    346.97927750737983,
+    343.09842473952796,
+    328.17916180278985,
+    358.25404400301494,
+    289.13475564173507,
+    357.28727050817565,
+    495.2852517811723,
+    341.42395161958103,
+    323.06498963586466,
+    393.8571744481344,
+    339.77110921006727,
+    319.65572221069726,
+    326.2100200330494,
+    334.3181326343883,
+    362.63721602255424,
+    394.557663547323,
+    427.25976882136797,
+    424.66633368991,
+    383.150259006347,
+    309.46844187520736,
+    370.069420944648,
+    331.42738293784345,
+    316.320151127536,
+    437.28631026002097
+  ],
+  "phase_changes": [
+    {
+      "episode": 0,
+      "phase": "Intermediate",
+      "reward": 432.93999999999915
+    },
+    {
+      "episode": 1,
+      "phase": "Advanced",
+      "reward": 769.4670399610519
+    }
+  ],
+  "learning_progress": [
+    {
+      "episode": 0,
+      "reward": 432.93999999999915,
+      "exploration": 0.39999999999999997,
+      "phase": "Intermediate"
+    },
+    {
+      "episode": 1,
+      "reward": 769.4670399610519,
+      "exploration": 0.19999999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 2,
+      "reward": 375.0718022333186,
+      "exploration": 0.19899999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 3,
+      "reward": 316.43033842966645,
+      "exploration": 0.19799999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 4,
+      "reward": 338.5998072985564,
+      "exploration": 0.19699999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 5,
+      "reward": 379.3217531059167,
+      "exploration": 0.19599999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 6,
+      "reward": 461.2090800851971,
+      "exploration": 0.19499999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 7,
+      "reward": 412.6169906419595,
+      "exploration": 0.19399999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 8,
+      "reward": 395.1403943233865,
+      "exploration": 0.19299999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 9,
+      "reward": 298.882686989755,
+      "exploration": 0.19199999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 10,
+      "reward": 451.2532628766708,
+      "exploration": 0.19099999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 11,
+      "reward": 343.0276360549711,
+      "exploration": 0.18999999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 12,
+      "reward": 453.62897801610296,
+      "exploration": 0.18899999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 13,
+      "reward": 405.8038917466934,
+      "exploration": 0.18799999999999994,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 14,
+      "reward": 386.4441096619604,
+      "exploration": 0.18699999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 15,
+      "reward": 417.8408129521953,
+      "exploration": 0.18599999999999994,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 16,
+      "reward": 387.1829846441936,
+      "exploration": 0.18499999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 17,
+      "reward": 406.4902512341765,
+      "exploration": 0.18399999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 18,
+      "reward": 314.7811042096343,
+      "exploration": 0.18299999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 19,
+      "reward": 431.9230227555618,
+      "exploration": 0.18199999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 20,
+      "reward": 495.53751041890524,
+      "exploration": 0.18099999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 21,
+      "reward": 323.4646995853392,
+      "exploration": 0.17999999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 22,
+      "reward": 327.04513813801765,
+      "exploration": 0.17899999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 23,
+      "reward": 316.98850472916047,
+      "exploration": 0.17799999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 24,
+      "reward": 407.4376744185045,
+      "exploration": 0.17699999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 25,
+      "reward": 387.3219987921372,
+      "exploration": 0.17599999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 26,
+      "reward": 395.8638044610552,
+      "exploration": 0.17499999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 27,
+      "reward": 412.5561669895308,
+      "exploration": 0.17399999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 28,
+      "reward": 429.480212218384,
+      "exploration": 0.17299999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 29,
+      "reward": 420.2201651690037,
+      "exploration": 0.17199999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 30,
+      "reward": 414.8538669907658,
+      "exploration": 0.17099999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 31,
+      "reward": 423.3755676554544,
+      "exploration": 0.16999999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 32,
+      "reward": 307.3957012131802,
+      "exploration": 0.16899999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 33,
+      "reward": 364.30580202272046,
+      "exploration": 0.16799999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 34,
+      "reward": 393.8652963269858,
+      "exploration": 0.16699999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 35,
+      "reward": 319.70153684370285,
+      "exploration": 0.16599999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 36,
+      "reward": 346.35787673287217,
+      "exploration": 0.16499999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 37,
+      "reward": 309.15900908574025,
+      "exploration": 0.16399999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 38,
+      "reward": 413.0307149484043,
+      "exploration": 0.16299999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 39,
+      "reward": 380.72725782276615,
+      "exploration": 0.16199999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 40,
+      "reward": 446.91009799829925,
+      "exploration": 0.16099999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 41,
+      "reward": 398.22159791715495,
+      "exploration": 0.15999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 42,
+      "reward": 369.49866997316883,
+      "exploration": 0.15899999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 43,
+      "reward": 368.58907381157456,
+      "exploration": 0.15799999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 44,
+      "reward": 318.65571245578275,
+      "exploration": 0.15699999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 45,
+      "reward": 303.89546606587993,
+      "exploration": 0.15599999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 46,
+      "reward": 394.72674034885677,
+      "exploration": 0.15499999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 47,
+      "reward": 365.7863237657397,
+      "exploration": 0.15399999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 48,
+      "reward": 417.3634641503963,
+      "exploration": 0.15299999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 49,
+      "reward": 430.0205205002038,
+      "exploration": 0.15199999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 50,
+      "reward": 286.97421760487214,
+      "exploration": 0.15099999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 51,
+      "reward": 443.18570495139915,
+      "exploration": 0.14999999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 52,
+      "reward": 277.7636275737111,
+      "exploration": 0.14899999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 53,
+      "reward": 340.6276555228905,
+      "exploration": 0.14799999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 54,
+      "reward": 445.2002428607417,
+      "exploration": 0.14699999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 55,
+      "reward": 376.6720838510713,
+      "exploration": 0.14599999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 56,
+      "reward": 351.0602307066084,
+      "exploration": 0.14499999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 57,
+      "reward": 335.07406789641897,
+      "exploration": 0.14399999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 58,
+      "reward": 417.3026057364104,
+      "exploration": 0.143,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 59,
+      "reward": 308.83769258938025,
+      "exploration": 0.14199999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 60,
+      "reward": 473.80205825115024,
+      "exploration": 0.141,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 61,
+      "reward": 428.9535844653357,
+      "exploration": 0.13999999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 62,
+      "reward": 361.118784009347,
+      "exploration": 0.13899999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 63,
+      "reward": 351.3157146964097,
+      "exploration": 0.13799999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 64,
+      "reward": 398.93894714159467,
+      "exploration": 0.13699999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 65,
+      "reward": 288.55261729660475,
+      "exploration": 0.13599999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 66,
+      "reward": 383.9390762378419,
+      "exploration": 0.13499999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 67,
+      "reward": 266.3391982918955,
+      "exploration": 0.13399999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 68,
+      "reward": 292.06013697372936,
+      "exploration": 0.13299999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 69,
+      "reward": 288.59755507739857,
+      "exploration": 0.13199999999999995,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 70,
+      "reward": 489.4787691055759,
+      "exploration": 0.13099999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 71,
+      "reward": 484.7527252774795,
+      "exploration": 0.12999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 72,
+      "reward": 288.2428751314648,
+      "exploration": 0.12899999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 73,
+      "reward": 324.8753507774522,
+      "exploration": 0.12799999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 74,
+      "reward": 310.2220770719611,
+      "exploration": 0.12699999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 75,
+      "reward": 403.3491016343428,
+      "exploration": 0.12599999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 76,
+      "reward": 339.4619039184838,
+      "exploration": 0.12499999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 77,
+      "reward": 348.54704506889766,
+      "exploration": 0.12399999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 78,
+      "reward": 282.2085142972286,
+      "exploration": 0.12299999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 79,
+      "reward": 437.5644638746596,
+      "exploration": 0.12199999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 80,
+      "reward": 430.71932938848875,
+      "exploration": 0.12099999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 81,
+      "reward": 345.75001920327617,
+      "exploration": 0.11999999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 82,
+      "reward": 383.86061094897536,
+      "exploration": 0.11899999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 83,
+      "reward": 408.9697023728723,
+      "exploration": 0.118,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 84,
+      "reward": 320.4360897302548,
+      "exploration": 0.11699999999999997,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 85,
+      "reward": 324.7558191787467,
+      "exploration": 0.11599999999999999,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 86,
+      "reward": 362.1510843931336,
+      "exploration": 0.11499999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 87,
+      "reward": 475.900862196284,
+      "exploration": 0.11399999999999999,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 88,
+      "reward": 300.67170476929107,
+      "exploration": 0.11299999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 89,
+      "reward": 313.2956859400332,
+      "exploration": 0.11199999999999999,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 90,
+      "reward": 315.3933763850954,
+      "exploration": 0.11099999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 91,
+      "reward": 297.38754109972206,
+      "exploration": 0.10999999999999999,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 92,
+      "reward": 336.50366745189007,
+      "exploration": 0.10899999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 93,
+      "reward": 449.30873304536067,
+      "exploration": 0.10799999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 94,
+      "reward": 328.99611820857535,
+      "exploration": 0.10699999999999996,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 95,
+      "reward": 340.58406438321975,
+      "exploration": 0.10599999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 96,
+      "reward": 417.61853964710787,
+      "exploration": 0.10499999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 97,
+      "reward": 444.042956443917,
+      "exploration": 0.10399999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 98,
+      "reward": 309.07320972357326,
+      "exploration": 0.10299999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 99,
+      "reward": 401.0628625505941,
+      "exploration": 0.10199999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 100,
+      "reward": 414.90876042094345,
+      "exploration": 0.10099999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 101,
+      "reward": 309.16851564246406,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 102,
+      "reward": 325.6796988966682,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 103,
+      "reward": 370.2712371788174,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 104,
+      "reward": 288.76159382695187,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 105,
+      "reward": 411.0267563551194,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 106,
+      "reward": 442.06552409235064,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 107,
+      "reward": 337.43369983948196,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 108,
+      "reward": 292.2485745343563,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 109,
+      "reward": 374.63435559949215,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 110,
+      "reward": 326.6469734797126,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 111,
+      "reward": 375.3713854339683,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 112,
+      "reward": 336.9163447359494,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 113,
+      "reward": 323.0133753690362,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 114,
+      "reward": 328.3369754677728,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 115,
+      "reward": 357.90614540872974,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 116,
+      "reward": 330.40793767526566,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 117,
+      "reward": 425.0314222482106,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 118,
+      "reward": 373.30571958380386,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 119,
+      "reward": 367.9078627704666,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 120,
+      "reward": 330.1268325797932,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 121,
+      "reward": 346.4069727856976,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 122,
+      "reward": 302.5867162574086,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 123,
+      "reward": 382.31150920514636,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 124,
+      "reward": 275.11250277067546,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 125,
+      "reward": 324.99765463009373,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 126,
+      "reward": 346.97927750737983,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 127,
+      "reward": 343.09842473952796,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 128,
+      "reward": 328.17916180278985,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 129,
+      "reward": 358.25404400301494,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 130,
+      "reward": 289.13475564173507,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 131,
+      "reward": 357.28727050817565,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 132,
+      "reward": 495.2852517811723,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 133,
+      "reward": 341.42395161958103,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 134,
+      "reward": 323.06498963586466,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 135,
+      "reward": 393.8571744481344,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 136,
+      "reward": 339.77110921006727,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 137,
+      "reward": 319.65572221069726,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 138,
+      "reward": 326.2100200330494,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 139,
+      "reward": 334.3181326343883,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 140,
+      "reward": 362.63721602255424,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 141,
+      "reward": 394.557663547323,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 142,
+      "reward": 427.25976882136797,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 143,
+      "reward": 424.66633368991,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 144,
+      "reward": 383.150259006347,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 145,
+      "reward": 309.46844187520736,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 146,
+      "reward": 370.069420944648,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 147,
+      "reward": 331.42738293784345,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 148,
+      "reward": 316.320151127536,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    },
+    {
+      "episode": 149,
+      "reward": 437.28631026002097,
+      "exploration": 0.09999999999999998,
+      "phase": "Advanced"
+    }
+  ]
+}

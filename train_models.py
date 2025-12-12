@@ -82,8 +82,86 @@ class LSTMWrapper(nn.Module):
         return output['prediction']
 
 
+class SimpleGNNForONNX(nn.Module):
+    """
+    Simple MLP-based GNN replacement for ONNX export.
+    PyTorch Geometric's GATConv is NOT ONNX-compatible due to dynamic graph ops.
+    This is a pure PyTorch implementation that mimics GNN behavior.
+    """
+    def __init__(self, input_dim: int = 10, hidden_dim: int = 64, output_dim: int = 64, num_nodes: int = 20):
+        super().__init__()
+        self.num_nodes = num_nodes
+        
+        # Node feature encoder (mimics GNN message passing)
+        # BatchNorm1d normalizes over features, not nodes
+        self.node_encoder = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim),
+            nn.ReLU(),
+            nn.BatchNorm1d(hidden_dim),
+            nn.Dropout(0.2),
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.BatchNorm1d(hidden_dim),
+            nn.Dropout(0.2),
+            nn.Linear(hidden_dim, output_dim)
+        )
+        
+        # Global aggregation (mimics graph pooling)
+        self.global_pool = nn.Sequential(
+            nn.Linear(output_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, output_dim)
+        )
+    
+    def forward(self, node_features):
+        # node_features: [num_nodes, input_dim]
+        # Encode each node
+        encoded = self.node_encoder(node_features)  # [num_nodes, output_dim]
+        
+        # Global mean pooling
+        pooled = encoded.mean(dim=0, keepdim=True)  # [1, output_dim]
+        
+        # Final projection
+        output = self.global_pool(pooled)  # [1, output_dim]
+        
+        return output
+
+
+class GNNONNXWrapper(nn.Module):
+    """
+    ONNX-compatible GNN wrapper combining SimpleGNN + Classifier.
+    Uses pure PyTorch operations for full ONNX compatibility.
+    """
+    def __init__(self, input_dim: int = 10, hidden_dim: int = 64, num_classes: int = 2, num_nodes: int = 20):
+        super().__init__()
+        
+        self.gnn = SimpleGNNForONNX(
+            input_dim=input_dim,
+            hidden_dim=hidden_dim,
+            output_dim=hidden_dim,
+            num_nodes=num_nodes
+        )
+        
+        self.classifier = nn.Sequential(
+            nn.Linear(hidden_dim, 128),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(128, 64),
+            nn.ReLU(),
+            nn.Dropout(0.2),
+            nn.Linear(64, num_classes)
+        )
+    
+    def forward(self, node_features):
+        # node_features: [num_nodes, input_dim]
+        gnn_out = self.gnn(node_features)  # [1, hidden_dim]
+        logits = self.classifier(gnn_out)  # [1, num_classes]
+        return logits
+
+
+# Legacy wrapper for compatibility
 class GNNWrapper(nn.Module):
-    """Wrapper for GNN model for ONNX export"""
+    """Wrapper for GNN model for ONNX export (uses PyTorch Geometric)"""
     def __init__(self, gnn_model, classifier, num_nodes=20):
         super().__init__()
         self.gnn = gnn_model
@@ -633,13 +711,19 @@ def train_gnn_model(
     return gnn_model, classifier, history
 
 
-def export_to_onnx(lstm_model, gnn_model, gnn_classifier, models_dir: str):
-    """Export trained models to ONNX format"""
+def export_to_onnx(lstm_model, onnx_gnn_model, models_dir: str):
+    """
+    Export trained models to ONNX format.
+    
+    Args:
+        lstm_model: Trained LSTM model
+        onnx_gnn_model: Trained ONNX-compatible GNN model (GNNONNXWrapper)
+        models_dir: Directory to save ONNX models
+    """
     logger.info("\n📦 Exporting models to ONNX...")
     
     lstm_model.eval()
-    gnn_model.eval()
-    gnn_classifier.eval()
+    onnx_gnn_model.eval()
     
     # Export LSTM (with wrapper to return tensor instead of dict)
     lstm_path = f"{models_dir}/lstm_predictor/lstm_model.onnx"
@@ -660,21 +744,18 @@ def export_to_onnx(lstm_model, gnn_model, gnn_classifier, models_dir: str):
     )
     logger.info(f"✅ LSTM exported to {lstm_path}")
     
-    # Export GNN (with wrapper)
+    # Export GNN (already ONNX-compatible)
     gnn_path = f"{models_dir}/gnn_sensor_network/gnn_model.onnx"
     os.makedirs(os.path.dirname(gnn_path), exist_ok=True)
     
-    gnn_wrapper = GNNWrapper(gnn_model, gnn_classifier).to(DEVICE)
-    gnn_wrapper.eval()
-    
     dummy_gnn_input = torch.randn(20, 10).to(DEVICE)
     torch.onnx.export(
-        gnn_wrapper,
+        onnx_gnn_model,
         dummy_gnn_input,
         gnn_path,
         input_names=['node_features'],
         output_names=['output'],
-        opset_version=16
+        opset_version=12
     )
     logger.info(f"✅ GNN exported to {gnn_path}")
 
@@ -752,8 +833,70 @@ def train_all_models(
         epochs=epochs, writer=writer
     )
     
-    # Export to ONNX
-    export_to_onnx(lstm_model, gnn_model, gnn_classifier, models_dir)
+    # ===== TRAIN ONNX-COMPATIBLE GNN =====
+    logger.info("\n" + "="*60)
+    logger.info("📊 TRAINING ONNX-COMPATIBLE GNN")
+    logger.info("="*60)
+    
+    onnx_gnn = GNNONNXWrapper(
+        input_dim=10, hidden_dim=64, num_classes=2, num_nodes=20
+    ).to(DEVICE)
+    
+    onnx_optimizer = optim.AdamW(onnx_gnn.parameters(), lr=0.002, weight_decay=1e-4)
+    onnx_scheduler = optim.lr_scheduler.OneCycleLR(
+        onnx_optimizer, max_lr=0.02, epochs=epochs,
+        steps_per_epoch=len(train_gnn_loader), pct_start=0.3
+    )
+    class_weights = torch.tensor([0.2, 3.0], device=DEVICE)
+    onnx_criterion = nn.CrossEntropyLoss(weight=class_weights)
+    
+    best_onnx_acc = 0.0
+    best_onnx_state = None
+    
+    for epoch in range(epochs):
+        onnx_gnn.train()
+        for node_features, labels in train_gnn_loader:
+            node_features, labels = node_features.to(DEVICE), labels.to(DEVICE)
+            onnx_optimizer.zero_grad()
+            
+            batch_outputs = []
+            for i in range(node_features.size(0)):
+                output = onnx_gnn(node_features[i])
+                batch_outputs.append(output)
+            
+            batch_outputs = torch.cat(batch_outputs, dim=0)
+            loss = onnx_criterion(batch_outputs, labels)
+            loss.backward()
+            onnx_optimizer.step()
+            onnx_scheduler.step()
+        
+        # Validation
+        onnx_gnn.eval()
+        correct = 0
+        total = 0
+        with torch.no_grad():
+            for node_features, labels in val_gnn_loader:
+                node_features, labels = node_features.to(DEVICE), labels.to(DEVICE)
+                for i in range(node_features.size(0)):
+                    output = onnx_gnn(node_features[i])
+                    _, pred = torch.max(output, 1)
+                    correct += (pred.item() == labels[i].item())
+                    total += 1
+        
+        onnx_acc = 100 * correct / total
+        if onnx_acc > best_onnx_acc:
+            best_onnx_acc = onnx_acc
+            best_onnx_state = onnx_gnn.state_dict().copy()
+        
+        if (epoch + 1) % 10 == 0:
+            logger.info(f"ONNX GNN Epoch {epoch+1}/{epochs} - Acc: {onnx_acc:.2f}%")
+    
+    if best_onnx_state:
+        onnx_gnn.load_state_dict(best_onnx_state)
+    logger.info(f"✅ ONNX GNN Training Complete! Best Acc: {best_onnx_acc:.2f}%")
+    
+    # Export to ONNX (use trained onnx_gnn)
+    export_to_onnx(lstm_model, onnx_gnn, models_dir)
     
     # Close TensorBoard writer
     writer.close()
@@ -779,7 +922,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Train Glass Production ML Models")
     parser.add_argument("--train", action="store_true", help="Train models (default action)")
-    parser.add_argument("--epochs", type=int, default=30, help="Number of training epochs")
+    parser.add_argument("--epochs", type=int, default=50, help="Number of training epochs")
     parser.add_argument("--batch-size", type=int, default=64, help="Batch size")
     parser.add_argument("--small-test", action="store_true", help="Use small datasets for quick testing")
     parser.add_argument("--datasets-dir", type=str, default="training/datasets", help="Datasets directory")

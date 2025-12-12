@@ -1,0 +1,454 @@
+2025-12-05 15:07:59,950 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-05 15:07:59,950 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-05 15:07:59,950 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-05 15:07:59,950 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-05 15:07:59,950 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-05 15:07:59,951 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-05 15:07:59,951 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-05 15:07:59,952 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:07:59,952 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-05 15:07:59,952 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-05 15:07:59,952 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-05 15:07:59,975 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-05 15:07:59,975 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-05 15:07:59,975 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-05 15:07:59,975 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-05 15:07:59,975 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-05 15:07:59,975 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-05 15:07:59,976 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-05 15:07:59,976 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-05 15:07:59,976 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-05 15:07:59,976 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-05 15:07:59,976 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:07:59,976 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-05 15:07:59,977 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-05 15:07:59,977 - unified_main - INFO - ✅ Data system initialized
+2025-12-05 15:07:59,977 - unified_main - INFO - 🔧 Инициализация интегрированной системы...
+2025-12-05 15:07:59,977 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:07:59,977 - unified_main - INFO - ✅ InfluxDB client initialized
+2025-12-05 15:08:00,005 - storage.postgres_client - INFO - ✅ PostgreSQL tables created/verified
+2025-12-05 15:08:00,005 - storage.postgres_client - INFO - ✅ Connected to PostgreSQL
+2025-12-05 15:08:00,006 - unified_main - INFO - ✅ PostgreSQL client initialized
+2025-12-05 15:08:00,006 - data_ingestion.setup - INFO - ✅ Configuration loaded from data_ingestion_config.json
+2025-12-05 15:08:00,006 - data_ingestion.main - INFO - 🔧 Инициализация системы сбора данных...
+2025-12-05 15:08:00,006 - data_ingestion.setup - INFO - ✅ Configuration loaded from data_ingestion_config.json
+2025-12-05 15:08:00,006 - data_ingestion.setup - INFO - ✅ Configuration validation passed
+2025-12-05 15:08:00,007 - data_ingestion.setup - INFO - ✅ Environment setup complete (environment: development)
+2025-12-05 15:08:00,007 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-05 15:08:00,007 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-05 15:08:00,007 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-05 15:08:00,008 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:08:00,008 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-05 15:08:00,008 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-05 15:08:00,009 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-05 15:08:00,009 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-05 15:08:00,021 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-05 15:08:00,021 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-05 15:08:00,022 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-05 15:08:00,023 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-05 15:08:00,023 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-05 15:08:00,023 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-05 15:08:00,023 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:08:00,023 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-05 15:08:00,023 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-05 15:08:00,023 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-05 15:08:00,024 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-05 15:08:00,024 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-05 15:08:00,024 - unified_main - INFO - ✅ Data ingestion system initialized
+2025-12-05 15:08:00,024 - unified_main - INFO - ✅ Data ingestion system initialized
+2025-12-05 15:08:00,035 - unified_main - INFO - ✅ LSTM model initialized
+2025-12-05 15:08:00,035 - unified_main - INFO - ✅ LSTM model initialized
+2025-12-05 15:08:00,168 - unified_main - INFO - ✅ Vision Transformer model initialized
+2025-12-05 15:08:00,168 - unified_main - INFO - ✅ Vision Transformer model initialized
+2025-12-05 15:08:00,208 - unified_main - INFO - ✅ GNN model initialized
+2025-12-05 15:08:00,208 - unified_main - INFO - ✅ GNN model initialized
+2025-12-05 15:08:00,209 - models.ensemble.meta_learner - INFO - ✅ Diversity ensemble created: 3 models
+2025-12-05 15:08:00,209 - models.ensemble.meta_learner - INFO - ✅ Diversity ensemble created: 3 models
+2025-12-05 15:08:00,209 - unified_main - INFO - ✅ Ensemble model initialized
+2025-12-05 15:08:00,209 - unified_main - INFO - ✅ Ensemble model initialized
+2025-12-05 15:08:00,222 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-05 15:08:00,222 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-05 15:08:00,245 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-05 15:08:00,245 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-05 15:08:00,273 - knowledge_graph.causal_graph - INFO - ✅ Knowledge graph schema initialized
+2025-12-05 15:08:00,273 - knowledge_graph.causal_graph - INFO - ✅ Knowledge graph schema initialized
+2025-12-05 15:08:00,273 - unified_main - INFO - ✅ Knowledge Graph initialized
+2025-12-05 15:08:00,273 - unified_main - INFO - ✅ Knowledge Graph initialized
+2025-12-05 15:08:00,274 - digital_twin.physics_simulation - INFO - Enhanced Furnace Simulator инициализирован (CPU)
+2025-12-05 15:08:00,274 - digital_twin.physics_simulation - INFO - Enhanced Furnace Simulator инициализирован (CPU)
+2025-12-05 15:08:00,274 - digital_twin.physics_simulation - INFO - ✅ Digital Twin initialized
+2025-12-05 15:08:00,274 - digital_twin.physics_simulation - INFO - ✅ Digital Twin initialized
+2025-12-05 15:08:00,274 - unified_main - INFO - ✅ Digital Twin initialized
+2025-12-05 15:08:00,274 - unified_main - INFO - ✅ Digital Twin initialized
+2025-12-05 15:08:00,419 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-05 15:08:00,419 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-05 15:08:00,419 - reinforcement_learning.ppo_optimizer - INFO - ✅ Glass Production PPO Agent created
+2025-12-05 15:08:00,419 - reinforcement_learning.ppo_optimizer - INFO - ✅ Glass Production PPO Agent created
+2025-12-05 15:08:00,419 - unified_main - INFO - ✅ RL Agent initialized
+2025-12-05 15:08:00,419 - unified_main - INFO - ✅ RL Agent initialized
+2025-12-05 15:08:00,420 - explainability.feature_attribution - WARNING - ⚠️ No model provided, explainers will be limited
+2025-12-05 15:08:00,420 - explainability.feature_attribution - WARNING - ⚠️ No model provided, explainers will be limited
+2025-12-05 15:08:00,420 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:00,420 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ Explainer initialized
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ Explainer initialized
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ AR Interface initialized
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ AR Interface initialized
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ Система полностью инициализирована
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ Система полностью инициализирована
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ System integrator initialized
+2025-12-05 15:08:00,420 - unified_main - INFO - ✅ System integrator initialized
+2025-12-05 15:08:00,420 - __main__ - INFO - ✅ Kafka доступен
+2025-12-05 15:08:00,420 - __main__ - INFO - ✅ Kafka доступен
+2025-12-05 15:08:00,420 - __main__ - INFO - 🔄 Starting WebSocket background tasks...
+2025-12-05 15:08:00,420 - __main__ - INFO - 🔄 Starting WebSocket background tasks...
+2025-12-05 15:08:00,420 - __main__ - INFO - ✅ Started 3 WebSocket background tasks
+2025-12-05 15:08:00,420 - __main__ - INFO - ✅ Started 3 WebSocket background tasks
+2025-12-05 15:08:00,421 - __main__ - INFO - 🔄 Initializing Digital Twin components...
+2025-12-05 15:08:00,421 - __main__ - INFO - 🔄 Initializing Digital Twin components...
+2025-12-05 15:08:00,421 - simulation.shadow_mode - INFO - ✅ Shadow Mode Simulator initialized with 300s prediction window
+2025-12-05 15:08:00,421 - simulation.shadow_mode - INFO - ✅ Shadow Mode Simulator initialized with 300s prediction window
+2025-12-05 15:08:00,421 - simulation.what_if_analyzer - INFO - ✅ What-If Analyzer initialized
+2025-12-05 15:08:00,421 - simulation.what_if_analyzer - INFO - ✅ What-If Analyzer initialized
+2025-12-05 15:08:00,421 - __main__ - INFO - ✅ Shadow Mode and What-If Analyzer initialized
+2025-12-05 15:08:00,421 - __main__ - INFO - ✅ Shadow Mode and What-If Analyzer initialized
+2025-12-05 15:08:00,421 - __main__ - INFO - 🔄 Initializing Pipeline Orchestrator...
+2025-12-05 15:08:00,421 - __main__ - INFO - 🔄 Initializing Pipeline Orchestrator...
+2025-12-05 15:08:00,421 - explainability.model_explainer - INFO - ✅ Integrated Model Explainer initialized
+2025-12-05 15:08:00,421 - explainability.model_explainer - INFO - ✅ Integrated Model Explainer initialized
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - 🔄 Pipeline Orchestrator initialized
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - 🔄 Pipeline Orchestrator initialized
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - 🔧 Initializing pipeline components...
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - 🔧 Initializing pipeline components...
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - ✅ Real-time feature extractor initialized
+2025-12-05 15:08:00,422 - integration.pipeline_orchestrator - INFO - ✅ Real-time feature extractor initialized
+2025-12-05 15:08:04,543 - tensorflow - WARNING - From C:\Users\hehehe\AppData\Roaming\Python\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-12-05 15:08:04,543 - tensorflow - WARNING - From C:\Users\hehehe\AppData\Roaming\Python\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-12-05 15:08:04,787 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,787 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,791 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,791 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,791 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,791 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,791 - explainability.model_explainer - INFO - ✅ Model 'lstm' registered for explainability
+2025-12-05 15:08:04,791 - explainability.model_explainer - INFO - ✅ Model 'lstm' registered for explainability
+2025-12-05 15:08:04,793 - integration.pipeline_orchestrator - INFO - ✅ LSTM model registered for explainability
+2025-12-05 15:08:04,793 - integration.pipeline_orchestrator - INFO - ✅ LSTM model registered for explainability
+2025-12-05 15:08:04,793 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,793 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,795 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,795 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,795 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,795 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,795 - explainability.model_explainer - INFO - ✅ Model 'vit' registered for explainability
+2025-12-05 15:08:04,795 - explainability.model_explainer - INFO - ✅ Model 'vit' registered for explainability
+2025-12-05 15:08:04,795 - integration.pipeline_orchestrator - INFO - ✅ ViT model registered for explainability
+2025-12-05 15:08:04,795 - integration.pipeline_orchestrator - INFO - ✅ ViT model registered for explainability
+2025-12-05 15:08:04,796 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,796 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-05 15:08:04,797 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,797 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-05 15:08:04,798 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,798 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-05 15:08:04,798 - explainability.model_explainer - INFO - ✅ Model 'gnn' registered for explainability
+2025-12-05 15:08:04,798 - explainability.model_explainer - INFO - ✅ Model 'gnn' registered for explainability
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ GNN model registered for explainability
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ GNN model registered for explainability
+2025-12-05 15:08:04,798 - training.continuous_learning - INFO - Initialized ContinualLearningFramework with replay=True, progressive=False
+2025-12-05 15:08:04,798 - training.continuous_learning - INFO - Initialized ContinualLearningFramework with replay=True, progressive=False
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ Continual learning framework initialized
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ Continual learning framework initialized
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ Pipeline orchestrator fully initialized
+2025-12-05 15:08:04,798 - integration.pipeline_orchestrator - INFO - ✅ Pipeline orchestrator fully initialized
+2025-12-05 15:08:04,799 - __main__ - INFO - ✅ Pipeline Orchestrator initialized (Phases 5-8 active)
+2025-12-05 15:08:04,799 - __main__ - INFO - ✅ Pipeline Orchestrator initialized (Phases 5-8 active)
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting sensor data stream task...
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting sensor data stream task...
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting defect detection stream task with probabilistic model...
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting defect detection stream task with probabilistic model...
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting quality metrics stream task...
+2025-12-05 15:08:04,799 - streaming_pipeline.websocket_broadcaster - INFO - 🔄 Starting quality metrics stream task...
+2025-12-05 15:08:40,889 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 1
+2025-12-05 15:08:40,889 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 1
+2025-12-05 15:21:36,104 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 2
+2025-12-05 15:21:36,104 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 2
+2025-12-05 15:21:36,443 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 3
+2025-12-05 15:21:36,443 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 3
+2025-12-05 15:22:24,135 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 4
+2025-12-05 15:22:24,135 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 4
+2025-12-05 15:22:24,474 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 5
+2025-12-05 15:22:24,474 - __main__ - INFO - ✅ WebSocket клиент подключен. Всего: 5
+2025-12-12 01:55:03,470 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-12 01:55:03,470 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-12 01:55:03,470 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-12 01:55:03,470 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-12 01:55:03,471 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-12 01:55:03,471 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-12 01:55:03,471 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-12 01:55:03,471 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,471 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-12 01:55:03,471 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-12 01:55:03,472 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-12 01:55:03,492 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-12 01:55:03,492 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-12 01:55:03,493 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-12 01:55:03,493 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-12 01:55:03,493 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-12 01:55:03,493 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-12 01:55:03,493 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-12 01:55:03,493 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-12 01:55:03,493 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-12 01:55:03,493 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-12 01:55:03,493 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,493 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-12 01:55:03,494 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-12 01:55:03,494 - unified_main - INFO - ✅ Data system initialized
+2025-12-12 01:55:03,494 - unified_main - INFO - 🔧 Инициализация интегрированной системы...
+2025-12-12 01:55:03,494 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,494 - unified_main - INFO - ✅ InfluxDB client initialized
+2025-12-12 01:55:03,522 - storage.postgres_client - INFO - ✅ PostgreSQL tables created/verified
+2025-12-12 01:55:03,523 - storage.postgres_client - INFO - ✅ Connected to PostgreSQL
+2025-12-12 01:55:03,523 - unified_main - INFO - ✅ PostgreSQL client initialized
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Configuration loaded from data_ingestion_config.json
+2025-12-12 01:55:03,524 - data_ingestion.main - INFO - 🔧 Инициализация системы сбора данных...
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Configuration loaded from data_ingestion_config.json
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Configuration validation passed
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Environment setup complete (environment: development)
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-12 01:55:03,524 - data_ingestion.setup - INFO - ✅ Logging setup complete
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - 🔧 Initializing data routing destinations...
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external Kafka address
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - ✅ Kafka producer initialized with servers: localhost:9093
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-12 01:55:03,524 - data_ingestion.data_router - INFO - ✅ Feature extractor initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ Data validator initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ Data buffer initialized
+2025-12-12 01:55:03,525 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,525 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ InfluxDB client initialized
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - 💻 Detected non-Docker environment, using external backend address
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-12 01:55:03,525 - data_ingestion.data_router - INFO - ✅ REST API client initialized with backend: http://localhost:8000
+2025-12-12 01:55:03,537 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-12 01:55:03,537 - streaming_pipeline.kafka_producer - INFO - ✅ Kafka Producer запущен: localhost:9093
+2025-12-12 01:55:03,537 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-12 01:55:03,537 - data_ingestion.data_router - INFO - ✅ Kafka producer started
+2025-12-12 01:55:03,537 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-12 01:55:03,537 - data_ingestion.data_router - INFO - ✅ Feature extractor ready
+2025-12-12 01:55:03,538 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-12 01:55:03,538 - data_ingestion.data_router - INFO - ✅ Data validator ready
+2025-12-12 01:55:03,538 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-12 01:55:03,538 - data_ingestion.data_router - INFO - ✅ Data buffer ready
+2025-12-12 01:55:03,538 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-12 01:55:03,538 - data_ingestion.data_collector - INFO - 🔧 Initializing data source connectors...
+2025-12-12 01:55:03,538 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-12 01:55:03,538 - data_ingestion.data_collector - INFO - ✅ OPC UA client initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ Modbus driver initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ MIK-1 camera stream initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-12 01:55:03,539 - data_ingestion.data_collector - INFO - ✅ MQTT broker connector initialized
+2025-12-12 01:55:03,539 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,539 - storage.influxdb_client - INFO - ✅ Connected to InfluxDB
+2025-12-12 01:55:03,539 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-12 01:55:03,539 - data_ingestion.main - INFO - 🔧 Компоненты системы инициализированы
+2025-12-12 01:55:03,539 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-12 01:55:03,539 - data_ingestion.main - INFO - ✅ Система сбора данных инициализирована
+2025-12-12 01:55:03,539 - unified_main - INFO - ✅ Data ingestion system initialized
+2025-12-12 01:55:03,539 - unified_main - INFO - ✅ Data ingestion system initialized
+2025-12-12 01:55:03,568 - unified_main - INFO - ✅ LSTM model initialized
+2025-12-12 01:55:03,568 - unified_main - INFO - ✅ LSTM model initialized
+2025-12-12 01:55:03,699 - unified_main - INFO - ✅ Vision Transformer model initialized
+2025-12-12 01:55:03,699 - unified_main - INFO - ✅ Vision Transformer model initialized
+2025-12-12 01:55:03,743 - unified_main - INFO - ✅ GNN model initialized
+2025-12-12 01:55:03,743 - unified_main - INFO - ✅ GNN model initialized
+2025-12-12 01:55:03,743 - models.ensemble.meta_learner - INFO - ✅ Diversity ensemble created: 3 models
+2025-12-12 01:55:03,743 - models.ensemble.meta_learner - INFO - ✅ Diversity ensemble created: 3 models
+2025-12-12 01:55:03,744 - unified_main - INFO - ✅ Ensemble model initialized
+2025-12-12 01:55:03,744 - unified_main - INFO - ✅ Ensemble model initialized
+2025-12-12 01:55:03,753 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-12 01:55:03,753 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-12 01:55:03,757 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-12 01:55:03,757 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-12 01:55:03,828 - knowledge_graph.causal_graph - INFO - ✅ Knowledge graph schema initialized
+2025-12-12 01:55:03,828 - knowledge_graph.causal_graph - INFO - ✅ Knowledge graph schema initialized
+2025-12-12 01:55:03,828 - unified_main - INFO - ✅ Knowledge Graph initialized
+2025-12-12 01:55:03,828 - unified_main - INFO - ✅ Knowledge Graph initialized
+2025-12-12 01:55:03,829 - digital_twin.physics_simulation - INFO - Enhanced Furnace Simulator инициализирован (CPU)
+2025-12-12 01:55:03,829 - digital_twin.physics_simulation - INFO - Enhanced Furnace Simulator инициализирован (CPU)
+2025-12-12 01:55:03,829 - digital_twin.physics_simulation - INFO - ✅ Digital Twin initialized
+2025-12-12 01:55:03,829 - digital_twin.physics_simulation - INFO - ✅ Digital Twin initialized
+2025-12-12 01:55:03,829 - unified_main - INFO - ✅ Digital Twin initialized
+2025-12-12 01:55:03,829 - unified_main - INFO - ✅ Digital Twin initialized
+2025-12-12 01:55:04,069 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-12 01:55:04,069 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-12 01:55:04,070 - reinforcement_learning.ppo_optimizer - INFO - ✅ Glass Production PPO Agent created
+2025-12-12 01:55:04,070 - reinforcement_learning.ppo_optimizer - INFO - ✅ Glass Production PPO Agent created
+2025-12-12 01:55:04,070 - unified_main - WARNING - ⚠️ Чекпоинты не найдены, RL Agent не обучен
+2025-12-12 01:55:04,070 - unified_main - WARNING - ⚠️ Чекпоинты не найдены, RL Agent не обучен
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ RL Agent инициализирован
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ RL Agent инициализирован
+2025-12-12 01:55:04,070 - explainability.feature_attribution - WARNING - ⚠️ No model provided, explainers will be limited
+2025-12-12 01:55:04,070 - explainability.feature_attribution - WARNING - ⚠️ No model provided, explainers will be limited
+2025-12-12 01:55:04,070 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:04,070 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ Explainer initialized
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ Explainer initialized
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ AR Interface initialized
+2025-12-12 01:55:04,070 - unified_main - INFO - ✅ AR Interface initialized
+2025-12-12 01:55:04,071 - unified_main - INFO - ✅ Система полностью инициализирована
+2025-12-12 01:55:04,071 - unified_main - INFO - ✅ Система полностью инициализирована
+2025-12-12 01:55:04,071 - unified_main - INFO - ✅ System integrator initialized
+2025-12-12 01:55:04,071 - unified_main - INFO - ✅ System integrator initialized
+2025-12-12 01:55:04,071 - __main__ - INFO - ✅ Kafka доступен
+2025-12-12 01:55:04,071 - __main__ - INFO - ✅ Kafka доступен
+2025-12-12 01:55:04,071 - __main__ - INFO - 🔄 Initializing Pipeline Orchestrator...
+2025-12-12 01:55:04,071 - __main__ - INFO - 🔄 Initializing Pipeline Orchestrator...
+2025-12-12 01:55:04,071 - explainability.model_explainer - INFO - ✅ Integrated Model Explainer initialized
+2025-12-12 01:55:04,071 - explainability.model_explainer - INFO - ✅ Integrated Model Explainer initialized
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - 🔄 Pipeline Orchestrator initialized
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - 🔄 Pipeline Orchestrator initialized
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - 🔧 Initializing pipeline components...
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - 🔧 Initializing pipeline components...
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - ✅ Real-time feature extractor initialized
+2025-12-12 01:55:04,071 - integration.pipeline_orchestrator - INFO - ✅ Real-time feature extractor initialized
+2025-12-12 01:55:08,844 - tensorflow - WARNING - From C:\Users\hehehe\AppData\Roaming\Python\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-12-12 01:55:08,844 - tensorflow - WARNING - From C:\Users\hehehe\AppData\Roaming\Python\Python312\site-packages\tf_keras\src\losses.py:2976: The name tf.losses.sparse_softmax_cross_entropy is deprecated. Please use tf.compat.v1.losses.sparse_softmax_cross_entropy instead.
+
+2025-12-12 01:55:09,114 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,114 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,121 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,121 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,121 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,121 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,121 - explainability.model_explainer - INFO - ✅ Model 'lstm' registered for explainability
+2025-12-12 01:55:09,121 - explainability.model_explainer - INFO - ✅ Model 'lstm' registered for explainability
+2025-12-12 01:55:09,121 - integration.pipeline_orchestrator - INFO - ✅ LSTM model registered for explainability
+2025-12-12 01:55:09,121 - integration.pipeline_orchestrator - INFO - ✅ LSTM model registered for explainability
+2025-12-12 01:55:09,122 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,122 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,123 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,123 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,123 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,123 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,124 - explainability.model_explainer - INFO - ✅ Model 'vit' registered for explainability
+2025-12-12 01:55:09,124 - explainability.model_explainer - INFO - ✅ Model 'vit' registered for explainability
+2025-12-12 01:55:09,124 - integration.pipeline_orchestrator - INFO - ✅ ViT model registered for explainability
+2025-12-12 01:55:09,124 - integration.pipeline_orchestrator - INFO - ✅ ViT model registered for explainability
+2025-12-12 01:55:09,124 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,124 - explainability.feature_attribution - INFO - ✅ SHAP explainer fitted with background samples
+2025-12-12 01:55:09,126 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,126 - explainability.feature_attribution - INFO - ✅ LIME explainer инициализирован
+2025-12-12 01:55:09,126 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,126 - explainability.feature_attribution - INFO - ✅ Enhanced Explainer инициализирован
+2025-12-12 01:55:09,126 - explainability.model_explainer - INFO - ✅ Model 'gnn' registered for explainability
+2025-12-12 01:55:09,126 - explainability.model_explainer - INFO - ✅ Model 'gnn' registered for explainability
+2025-12-12 01:55:09,126 - integration.pipeline_orchestrator - INFO - ✅ GNN model registered for explainability
+2025-12-12 01:55:09,126 - integration.pipeline_orchestrator - INFO - ✅ GNN model registered for explainability
+2025-12-12 01:55:09,127 - training.continuous_learning - INFO - Initialized ContinualLearningFramework with replay=True, progressive=False
+2025-12-12 01:55:09,127 - training.continuous_learning - INFO - Initialized ContinualLearningFramework with replay=True, progressive=False
+2025-12-12 01:55:09,127 - integration.pipeline_orchestrator - INFO - ✅ Continual learning framework initialized
+2025-12-12 01:55:09,127 - integration.pipeline_orchestrator - INFO - ✅ Continual learning framework initialized
+2025-12-12 01:55:09,127 - integration.pipeline_orchestrator - INFO - ✅ Pipeline orchestrator fully initialized
+2025-12-12 01:55:09,127 - integration.pipeline_orchestrator - INFO - ✅ Pipeline orchestrator fully initialized
+2025-12-12 01:55:09,127 - __main__ - INFO - ✅ Pipeline Orchestrator initialized (Phases 5-8 active)
+2025-12-12 01:55:09,127 - __main__ - INFO - ✅ Pipeline Orchestrator initialized (Phases 5-8 active)
+2025-12-12 01:55:09,127 - __main__ - INFO - 🔔 Initializing Notification Manager...
+2025-12-12 01:55:09,127 - __main__ - INFO - 🔔 Initializing Notification Manager...
+2025-12-12 01:55:09,127 - __main__ - INFO - ✅ Notification Manager initialized (ML-driven mode - no hardcoded samples)
+2025-12-12 01:55:09,127 - __main__ - INFO - ✅ Notification Manager initialized (ML-driven mode - no hardcoded samples)
+2025-12-12 01:55:09,128 - __main__ - INFO - 🔄 Starting WebSocket background tasks with notification and analytics integration...
+2025-12-12 01:55:09,128 - __main__ - INFO - 🔄 Starting WebSocket background tasks with notification and analytics integration...
+2025-12-12 01:55:09,128 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ LSTM model not found: models\lstm_predictor\lstm_model.onnx
+2025-12-12 01:55:09,128 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ LSTM model not found: models\lstm_predictor\lstm_model.onnx
+2025-12-12 01:55:09,128 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ GNN model not found: models\gnn_sensor_network\gnn_model.onnx
+2025-12-12 01:55:09,128 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ GNN model not found: models\gnn_sensor_network\gnn_model.onnx
+2025-12-12 01:55:09,133 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-12 01:55:09,133 - reinforcement_learning.ppo_optimizer - INFO - ✅ Enhanced PPO Agent инициализирован на cuda
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ RL Agent loaded
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ RL Agent loaded
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ Feature extractor initialized
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ Feature extractor initialized
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - 🚀 Starting ML-driven background tasks:
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - 🚀 Starting ML-driven background tasks:
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - notification_manager: enabled
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - notification_manager: enabled
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - analytics_storage: enabled
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - analytics_storage: enabled
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - ML pipeline: fallback mode
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO -    - ML pipeline: fallback mode
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ Created 4 ML-driven streaming tasks:
+2025-12-12 01:55:09,134 - streaming_pipeline.websocket_broadcaster - INFO - ✅ Created 4 ML-driven streaming tasks:
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    1. sensors (GNN anomaly detection)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    1. sensors (GNN anomaly detection)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    2. defects (LSTM + GNN + notifications)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    2. defects (LSTM + GNN + notifications)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    3. quality (LSTM + sensor level)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    3. quality (LSTM + sensor level)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    4. recommendations (PPO Agent)
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO -    4. recommendations (PPO Agent)
+2025-12-12 01:55:09,135 - __main__ - INFO - ✅ Started 4 WebSocket background tasks with full integration
+2025-12-12 01:55:09,135 - __main__ - INFO - ✅ Started 4 WebSocket background tasks with full integration
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven sensor data stream task...
+2025-12-12 01:55:09,135 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven sensor data stream task...
+2025-12-12 01:55:09,136 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven defect detection stream task...
+2025-12-12 01:55:09,136 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven defect detection stream task...
+2025-12-12 01:55:09,136 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven quality metrics stream task...
+2025-12-12 01:55:09,136 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting ML-driven quality metrics stream task...
+2025-12-12 01:55:09,137 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting RL-driven recommendations stream task...
+2025-12-12 01:55:09,137 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 Starting RL-driven recommendations stream task...
+2025-12-12 01:55:09,617 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ Feature importance extraction failed: 'RealTimeFeatureExtractor' object has no attribute 'update'
+2025-12-12 01:55:09,617 - streaming_pipeline.websocket_broadcaster - WARNING - ⚠️ Feature importance extraction failed: 'RealTimeFeatureExtractor' object has no attribute 'update'
+2025-12-12 01:55:09,626 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-12 01:55:09,626 - knowledge_graph.causal_graph - INFO - ✅ Neo4j database connected
+2025-12-12 01:55:09,630 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-12 01:55:09,630 - knowledge_graph.causal_graph - INFO - ✅ Redis cache connected
+2025-12-12 01:55:09,630 - streaming_pipeline.websocket_broadcaster - INFO - 🧠 Knowledge Graph initialized for real-time enrichment
+2025-12-12 01:55:09,630 - streaming_pipeline.websocket_broadcaster - INFO - 🧠 Knowledge Graph initialized for real-time enrichment
+2025-12-12 01:55:09,632 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Увеличить мощность печи до 85490.0°C for crack
+2025-12-12 01:55:09,632 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Увеличить мощность печи до 85490.0°C for crack
+2025-12-12 01:55:09,639 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Увеличить скорость конвейера до 168.8 м/мин for crack
+2025-12-12 01:55:09,639 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Увеличить скорость конвейера до 168.8 м/мин for crack
+2025-12-12 01:55:09,643 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Повысить температуру формы до 4306.5°C for crack
+2025-12-12 01:55:09,643 - knowledge_graph.causal_graph - INFO - 🎮 KG enriched from RL: Повысить температуру формы до 4306.5°C for crack
+2025-12-12 01:55:09,645 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 RL Agent generated 3 recommendations
+2025-12-12 01:55:09,645 - streaming_pipeline.websocket_broadcaster - INFO - 🤖 RL Agent generated 3 recommendations

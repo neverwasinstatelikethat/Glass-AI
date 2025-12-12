@@ -29,13 +29,13 @@ const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
 export const knowledgeGraphApi = {
   // Get causes of a defect
   getCausesOfDefect: async (defect: string, minConfidence: number = 0.5): Promise<Cause[]> => {
-    const data = await apiFetch(`/knowledge-graph/causes/${defect}?min_confidence=${minConfidence}`);
+    const data = await apiFetch(`/api/knowledge-graph/causes/${defect}?min_confidence=${minConfidence}`);
     return data.causes || [];
   },
 
   // Get intervention recommendations
   getRecommendations: async (defect: string, parameterValues: Record<string, number>): Promise<Recommendation[]> => {
-    const data = await apiFetch(`/knowledge-graph/recommendations/${defect}`, {
+    const data = await apiFetch(`/api/knowledge-graph/recommendations/${defect}`, {
       method: 'POST',
       body: JSON.stringify({ parameter_values: parameterValues }),
     });
@@ -44,7 +44,7 @@ export const knowledgeGraphApi = {
 
   // Get subgraph for visualization
   getSubgraph: async (defect: string, maxDepth: number = 2): Promise<SubgraphData> => {
-    const data = await apiFetch(`/knowledge-graph/subgraph/${defect}?max_depth=${maxDepth}`);
+    const data = await apiFetch(`/api/knowledge-graph/subgraph/${defect}?max_depth=${maxDepth}`);
     return data;
   },
 };

@@ -7,6 +7,8 @@ import AdvancedDashboard from './components/AdvancedDashboard';
 import ARVisualization from './components/ARVisualization';
 import DigitalTwin3D from './components/DigitalTwin3D';
 import KnowledgeGraph from './components/KnowledgeGraph';
+import NotificationsCenter from './components/NotificationsCenter';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
 import { Factory, Science, Timeline, Warning } from '@mui/icons-material';
 
 const theme = createTheme({
@@ -454,23 +456,7 @@ const AnalyticsHeader = () => (
 );
 
 const AnalyticsPage = () => (
-    <StyledAnalyticsContainer>
-        <AnalyticsHeader />
-        <StyledAnalyticsPaper>
-            <Science sx={scienceIconSx} />
-            <Typography variant="h4" sx={analyticsPaperTitleSx}>
-                Модуль расширенной аналитики
-            </Typography>
-            <Typography variant="h6" sx={{ color: '#B8C5D6', mb: 3, lineHeight: 1.8 }}>
-                Здесь будут представлены детальные отчеты, прогнозные модели и статистический анализ
-            </Typography>
-            <Chip
-                label="В РАЗРАБОТКЕ"
-                sx={chipSx}
-
-            />
-        </StyledAnalyticsPaper>
-    </StyledAnalyticsContainer>
+    <AnalyticsDashboard />
 );
 
 const AlertsHeader = () => (
@@ -488,23 +474,7 @@ const AlertsHeader = () => (
 );
 
 const AlertsPage = () => (
-    <StyledAlertsContainer>
-        <AlertsHeader />
-        <StyledAlertsPaper>
-            <Warning sx={warningLargeIconSx} />
-            <Typography variant="h4" sx={alertsPaperTitleSx}>
-                Система уведомлений в реальном времени
-            </Typography>
-            <Typography variant="h6" sx={{ color: '#B8C5D6', mb: 3, lineHeight: 1.8 }}>
-                Интеллектуальная система отслеживания аномалий и критических событий
-            </Typography>
-            <Chip
-                label="В РАЗРАБОТКЕ"
-                sx={alertsChipSx}
-
-            />
-        </StyledAlertsPaper>
-    </StyledAlertsContainer>
+    <NotificationsCenter />
 );
 
 // --- MAIN COMPONENT ---

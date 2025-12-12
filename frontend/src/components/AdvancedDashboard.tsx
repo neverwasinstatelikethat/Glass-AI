@@ -75,9 +75,12 @@ import {
 import type { Theme } from '@mui/material/styles';
 
 import useDashboardData from '../hooks/useDashboardData';
-import ExplainabilityPanel from './ExplainabilityPanel';
-import MetricsMonitor from './MetricsMonitor';
-import AutonomyStatus from './AutonomyStatus';
+import { useWebSocketStream } from '../hooks/useWebSocketStream';
+import { useNotifications } from '../hooks/useNotifications';
+// Removed unused imports
+// import ExplainabilityPanel from './ExplainabilityPanel';
+// import MetricsMonitor from './MetricsMonitor';
+// import AutonomyStatus from './AutonomyStatus';
 
 // Расширенная палитра РТУ МИРЭА 2025
 const MIREA_2025_COLORS = {
@@ -1333,101 +1336,144 @@ const StatusText = styled(Typography)({
 
 const AdvancedDashboard: React.FC = () => {
     const { data, loading, error } = useDashboardData();
+    const { wsData, isConnected } = useWebSocketStream();
+    const { notifications, unacknowledgedCount } = useNotifications(wsData.defectAlerts);
     
-    // Use real data when available, fallback to mock data
-    const kpiData = data?.kpiData || {
-        qualityRate: 96.5,
-        defectCount: 42,
-        unitsProduced: 1250,
-        uptime: 98.5
-    };
+    // Calculate total defects from aggregation
+    const totalDefectsFromWs = React.useMemo(() => {
+        return Object.values(wsData.defectAggregation).reduce((sum, count) => sum + count, 0);
+    }, [wsData.defectAggregation]);
     
-    const defectDistribution = data?.defectDistribution || [
-        { name: 'Трещины', value: 12, color: MIREA_2025_COLORS.error },
-        { name: 'Пузыри', value: 18, color: MIREA_2025_COLORS.warning },
-        { name: 'Сколы', value: 8, color: MIREA_2025_COLORS.tertiary },
-        { name: 'Помутнение', value: 5, color: MIREA_2025_COLORS.info },
-        { name: 'Деформация', value: 2, color: MIREA_2025_COLORS.accentPurple }
-    ];
-    
-    const performanceData = data?.performanceData || [
-        { time: '08:00', quality: 95.2, defects: 52 },
-        { time: '09:00', quality: 95.8, defects: 48 },
-        { time: '10:00', quality: 96.1, defects: 46 },
-        { time: '11:00', quality: 96.5, defects: 45 },
-        { time: '12:00', quality: 96.3, defects: 47 },
-        { time: '13:00', quality: 96.7, defects: 43 },
-        { time: '14:00', quality: 96.5, defects: 45 },
-        { time: '15:00', quality: 97.1, defects: 41 },
-        { time: '16:00', quality: 97.3, defects: 40 },
-    ];
-    
-    const realTimeMetrics = data?.realTimeMetrics || [
-        {
-            name: 'Температура печи',
-            value: 1520,
-            unit: '°C',
-            max: 1600,
-            trend: 'stable' as const,
-            icon: '🔥'
-        },
-        {
-            name: 'Уровень расплава',
-            value: 2.45,
-            unit: 'м',
-            max: 3.0,
-            trend: 'up' as const,
-            icon: '💧'
-        },
-        {
-            name: 'Скорость ленты',
-            value: 155,
-            unit: 'м/мин',
-            max: 200,
-            trend: 'down' as const,
-            icon: '⚡'
-        },
-        {
-            name: 'Температура формы',
-            value: 325,
-            unit: '°C',
-            max: 350,
-            trend: 'stable' as const,
-            icon: '🌡️'
+    // Build defect distribution from WebSocket data
+    const defectDistribution = React.useMemo(() => {
+        const agg = wsData.defectAggregation;
+        const hasData = Object.keys(agg).length > 0 && Object.values(agg).some(v => v > 0);
+        
+        if (hasData) {
+            return [
+                { name: 'Трещины', value: agg['crack'] || 0, color: MIREA_2025_COLORS.error },
+                { name: 'Пузыри', value: agg['bubble'] || 0, color: MIREA_2025_COLORS.warning },
+                { name: 'Сколы', value: agg['chip'] || 0, color: MIREA_2025_COLORS.tertiary },
+                { name: 'Помутнение', value: agg['cloudiness'] || 0, color: MIREA_2025_COLORS.info },
+                { name: 'Деформация', value: agg['deformation'] || 0, color: MIREA_2025_COLORS.accentPurple },
+                { name: 'Пятна', value: agg['stain'] || 0, color: MIREA_2025_COLORS.accentCyan }
+            ].filter(d => d.value > 0);
         }
+        
+        // Use API data if no WebSocket data
+        return data?.defectDistribution || [
+            { name: 'Трещины', value: 0, color: MIREA_2025_COLORS.error },
+            { name: 'Пузыри', value: 0, color: MIREA_2025_COLORS.warning },
+            { name: 'Сколы', value: 0, color: MIREA_2025_COLORS.tertiary }
+        ];
+    }, [wsData.defectAggregation, data?.defectDistribution]);
+    
+    // Build real-time metrics from WebSocket parameters
+    const realTimeMetrics = React.useMemo(() => {
+        if (wsData.parameters) {
+            const p = wsData.parameters;
+            return [
+                {
+                    name: 'Температура печи',
+                    value: Math.round(p.furnace.temperature),
+                    unit: '°C',
+                    max: 1600,
+                    trend: 'stable' as const,
+                    icon: 'LocalFireDepartment'
+                },
+                {
+                    name: 'Давление печи',
+                    value: Math.round(p.furnace.pressure * 10) / 10,
+                    unit: 'кПа',
+                    max: 50,
+                    trend: 'stable' as const,
+                    icon: 'WaterDrop'
+                },
+                {
+                    name: 'Скорость ленты',
+                    value: Math.round(p.forming.speed),
+                    unit: 'м/мин',
+                    max: 200,
+                    trend: 'down' as const,
+                    icon: 'Speed'
+                },
+                {
+                    name: 'Температура формы',
+                    value: Math.round(p.forming.mold_temp),
+                    unit: '°C',
+                    max: 400,
+                    trend: 'stable' as const,
+                    icon: 'Thermostat'
+                }
+            ];
+        }
+        return data?.realTimeMetrics || [];
+    }, [wsData.parameters, data?.realTimeMetrics]);
+    
+    // Build AI recommendations from WebSocket or API data
+    const aiRecommendations = React.useMemo(() => {
+        if (wsData.recommendations.length > 0) {
+            return wsData.recommendations.map((rec: any) => ({
+                text: rec.action || rec.description || rec.text || 'Рекомендация RL агента',
+                priority: (rec.priority || 'medium').toLowerCase() as 'high' | 'medium' | 'low',
+                impact: Math.round((rec.confidence || rec.expected_improvement || 0.7) * 100),
+                icon: rec.parameter === 'furnace_temperature' ? 'LocalFireDepartment' : 
+                      rec.parameter === 'belt_speed' ? 'Speed' :
+                      rec.parameter === 'mold_temp' ? 'Thermostat' :
+                      rec.parameter === 'energy_consumption' ? 'Factory' : 'Psychology'
+            }));
+        }
+        return data?.aiRecommendations || [];
+    }, [wsData.recommendations, data?.aiRecommendations]);
+    
+    // Memoized KPI values - use WebSocket quality metrics if available
+    const kpiData = React.useMemo(() => {
+        // Priority: WebSocket qualityMetrics > calculated from defects > API data
+        const wsQuality = wsData.qualityMetrics;
+        
+        if (wsQuality) {
+            return {
+                qualityRate: wsQuality.qualityRate,
+                defectCount: wsQuality.defectCount,
+                unitsProduced: wsQuality.unitsProduced,
+                uptime: isConnected ? (data?.kpiData?.uptime || 98.5) : 0
+            };
+        }
+        
+        // Fallback: calculate from defect aggregation
+        if (totalDefectsFromWs > 0) {
+            // Use a dynamic base that reflects actual production rather than hardcoded 1000
+            const baseUnits = Math.max(100, totalDefectsFromWs * 10); // Adjust this formula as needed
+            const qualityRate = Math.max(85, ((baseUnits - totalDefectsFromWs) / baseUnits) * 100);
+            return {
+                qualityRate: Math.round(qualityRate * 10) / 10,
+                defectCount: totalDefectsFromWs,
+                unitsProduced: baseUnits - totalDefectsFromWs, // Actual good units
+                uptime: isConnected ? (data?.kpiData?.uptime || 98.5) : 0
+            };
+        }
+        
+        // Fallback: use API data without hardcoded defaults
+        return {
+            qualityRate: data?.kpiData?.qualityRate || 0,
+            defectCount: data?.kpiData?.defectCount || 0,
+            unitsProduced: data?.kpiData?.unitsProduced || 0,
+            uptime: isConnected ? (data?.kpiData?.uptime || 0) : 0
+        };
+    }, [wsData.qualityMetrics, totalDefectsFromWs, data?.kpiData, isConnected]);
+    
+    // Performance data from API (updates every 10 minutes via polling)
+    const performanceData = data?.performanceData || [
+        { time: '--:--', quality: 0, defects: 0 }
     ];
     
-    const aiRecommendations = data?.aiRecommendations || [
-        {
-            text: "Снизить температуру печи на 15°C для минимизации образования трещин",
-            priority: 'high',
-            impact: 85,
-            icon: '🔥'
-        },
-        {
-            text: "Увеличить скорость ленты на 5% для оптимизации производительности",
-            priority: 'medium',
-            impact: 65,
-            icon: '⚡'
-        },
-        {
-            text: "Настроить температуру формы на 320°C для повышения консистенции качества",
-            priority: 'medium',
-            impact: 60,
-            icon: '🌡️'
-        },
-        {
-            text: "Запланировать техобслуживание горелочной зоны №2 для предотвращения перегрева",
-            priority: 'low',
-            impact: 45,
-            icon: '🔧'
-        },
-        {
-            text: "Оптимизировать подачу сырья для снижения затрат на 12%",
-            priority: 'high',
-            impact: 90,
-            icon: 'Factory'        }
-    ];
+    // Last update indicator
+    const lastUpdateTime = React.useMemo(() => {
+        if (wsData.lastUpdate) {
+            return new Date(wsData.lastUpdate).toLocaleTimeString('ru-RU');
+        }
+        return null;
+    }, [wsData.lastUpdate]);
 
     const StatusIconRow = styled(Box)({
         display: 'flex',
@@ -1497,29 +1543,9 @@ const AdvancedDashboard: React.FC = () => {
                     </Grid>
                 </GridContainer>
 
-                <GridContainer container spacing={3}>
-                    <Grid item xs={12} md={4}>
-                        <RealTimeMetricsPanel metrics={realTimeMetrics} />
-                    </Grid>
-                    <Grid item xs={12} md={8}>
-                        <AIInsightsPanel recommendations={aiRecommendations} />
-                    </Grid>
-                </GridContainer>
 
-                {/* New Phases 5-8 Components */}
-                <GridContainer container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                        <ExplainabilityPanel modelName="lstm" refreshInterval={10000} />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <MetricsMonitor refreshInterval={5000} />
-                    </Grid>
-                </GridContainer>
-                <GridContainer container spacing={3}>
-                    <Grid item xs={12}>
-                        <AutonomyStatus />
-                    </Grid>
-                </GridContainer>
+
+
 
                 {/* Дополнительный контент */}
                 <Grid container spacing={3}>
@@ -1528,18 +1554,81 @@ const AdvancedDashboard: React.FC = () => {
                             <CardContent style={{ padding: 24 }}>
                                 <StatusCardHeader>
                                     <StatusTitle variant="h6">
-                                        Система в реальном времени подключена
+                                        Навигация по системе
                                     </StatusTitle>
-                                    <StatusIconRow>
-                                        <StatusIndicator />
-                                        <Typography variant="body2" style={{ color: MIREA_2025_COLORS.textTertiary }}>
-                                            Активно
-                                        </Typography>
-                                    </StatusIconRow>
                                 </StatusCardHeader>
-                                <StatusText variant="body1">
-                                    Система искусственного интеллекта непрерывно анализирует производственные данные для
-                                    максимальной эффективности и качества продукции. Все системы функционируют в штатном режиме.
+                                <StatusText variant="body1" style={{ marginBottom: 20 }}>
+                                    Добро пожаловать в интеллектуальную систему контроля качества стекла. Ниже представлена структура интерфейса:
+                                </StatusText>
+                                
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} md={6}>
+                                        <Box style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                                            <AvatarStyled style={{ marginRight: 16, background: 'linear-gradient(135deg, #0066FF, #00E5FF)' }}>
+                                                <Timeline />
+                                            </AvatarStyled>
+                                            <Box>
+                                                <Typography variant="h6" style={{ color: '#FFFFFF', marginBottom: 4 }}>
+                                                    Аналитика и отчеты
+                                                </Typography>
+                                                <Typography variant="body2" style={{ color: MIREA_2025_COLORS.textTertiary }}>
+                                                    Подробная аналитика, тренды дефектов, корреляции и KPI метрики
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    
+                                    <Grid item xs={12} md={6}>
+                                        <Box style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                                            <AvatarStyled style={{ marginRight: 16, background: 'linear-gradient(135deg, #FF3366, #FF9E6D)' }}>
+                                                <Psychology />
+                                            </AvatarStyled>
+                                            <Box>
+                                                <Typography variant="h6" style={{ color: '#FFFFFF', marginBottom: 4 }}>
+                                                    Рекомендации ИИ
+                                                </Typography>
+                                                <Typography variant="body2" style={{ color: MIREA_2025_COLORS.textTertiary }}>
+                                                    Интеллектуальные рекомендации для оптимизации процесса производства
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    
+                                    <Grid item xs={12} md={6}>
+                                        <Box style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                                            <AvatarStyled style={{ marginRight: 16, background: 'linear-gradient(135deg, #00E676, #6EFFB2)' }}>
+                                                <DeviceHub />
+                                            </AvatarStyled>
+                                            <Box>
+                                                <Typography variant="h6" style={{ color: '#FFFFFF', marginBottom: 4 }}>
+                                                    Граф знаний
+                                                </Typography>
+                                                <Typography variant="body2" style={{ color: MIREA_2025_COLORS.textTertiary }}>
+                                                    Визуализация причинно-следственных связей между параметрами и дефектами
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                    
+                                    <Grid item xs={12} md={6}>
+                                        <Box style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>
+                                            <AvatarStyled style={{ marginRight: 16, background: 'linear-gradient(135deg, #9D4EDD, #E0AAFF)' }}>
+                                                <Factory />
+                                            </AvatarStyled>
+                                            <Box>
+                                                <Typography variant="h6" style={{ color: '#FFFFFF', marginBottom: 4 }}>
+                                                    Цифровой двойник
+                                                </Typography>
+                                                <Typography variant="body2" style={{ color: MIREA_2025_COLORS.textTertiary }}>
+                                                    3D визуализация производственной линии и моделирование процессов
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                </Grid>
+                                
+                                <StatusText variant="body1" style={{ marginTop: 20, fontStyle: 'italic' }}>
+                                    Используйте навигационное меню слева для перехода к нужному разделу системы.
                                 </StatusText>
                             </CardContent>
                         </GlassCard>

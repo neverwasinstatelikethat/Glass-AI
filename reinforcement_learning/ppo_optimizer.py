@@ -14,6 +14,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+import torch.serialization
 from torch.distributions import Normal, Categorical
 import numpy as np
 from typing import Dict, List, Tuple, Optional, Any
@@ -326,6 +327,9 @@ class GlassProductionPPO:
         self.config = config or PPOConfig()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
+        # Register safe globals for serialization
+        torch.serialization.add_safe_globals([PPOConfig])
+        
         # Safety constraints
         self.safety = SafetyConstraints()
         
@@ -403,13 +407,15 @@ class GlassProductionPPO:
                 discrete_actions.append(action)
                 discrete_log_probs.append(log_prob)
         
-        # Safety check
+        # Safety check - only apply if enabled in config
         continuous_action_np = continuous_action.cpu().numpy().flatten()
-        is_safe, penalty = self.safety.check_action_safety(state, continuous_action_np)
+        penalty = 0.0
         
-        if not is_safe and self.config.safe_exploration:
-            continuous_action_np = self.safety.clip_action(continuous_action_np)
-            self.safety_violations += 1
+        if self.config.safe_exploration:
+            is_safe, penalty = self.safety.check_action_safety(state, continuous_action_np)
+            if not is_safe:
+                continuous_action_np = self.safety.clip_action(continuous_action_np)
+                self.safety_violations += 1
         
         discrete_actions_np = [action.cpu().numpy().flatten() for action in discrete_actions]
         continuous_log_prob_np = continuous_log_prob.cpu().numpy()
@@ -422,12 +428,38 @@ class GlassProductionPPO:
     
     def save_checkpoint(self, episode: int, best: bool = False):
         """Сохранение checkpoint модели"""
+        # Save config parameters instead of the config object itself to avoid import issues
+        config_params = {
+            'learning_rate': self.config.learning_rate,
+            'gamma': self.config.gamma,
+            'lam': self.config.lam,
+            'epsilon': self.config.epsilon,
+            'epochs': self.config.epochs,
+            'batch_size': self.config.batch_size,
+            'hidden_size': self.config.hidden_size,
+            'actor_lr': self.config.actor_lr,
+            'critic_lr': self.config.critic_lr,
+            'entropy_coef': self.config.entropy_coef,
+            'max_grad_norm': self.config.max_grad_norm,
+            'use_prioritized_replay': self.config.use_prioritized_replay,
+            'priority_alpha': self.config.priority_alpha,
+            'priority_beta': self.config.priority_beta,
+            'use_curriculum': self.config.use_curriculum,
+            'exploration_initial': self.config.exploration_initial,
+            'exploration_final': self.config.exploration_final,
+            'exploration_decay': self.config.exploration_decay,
+            'safe_exploration': self.config.safe_exploration,
+            'constraint_penalty': self.config.constraint_penalty,
+            'checkpoint_freq': self.config.checkpoint_freq,
+            'checkpoint_dir': self.config.checkpoint_dir
+        }
+        
         checkpoint = {
             'episode': episode,
             'actor_critic_state_dict': self.actor_critic.state_dict(),
             'actor_optimizer_state_dict': self.actor_optimizer.state_dict(),
             'critic_optimizer_state_dict': self.critic_optimizer.state_dict(),
-            'config': self.config,
+            'config_params': config_params,
             'exploration_rate': self.exploration_rate,
             'total_steps': self.total_steps,
             'episode_rewards': list(self.episode_rewards)
@@ -441,11 +473,51 @@ class GlassProductionPPO:
     
     def load_checkpoint(self, filepath: str):
         """Загрузка checkpoint"""
-        checkpoint = torch.load(filepath, map_location=self.device)
+        try:
+            # First try loading with weights_only=True (PyTorch 2.6+ default)
+            checkpoint = torch.load(filepath, map_location=self.device, weights_only=True)
+        except TypeError:
+            # For older PyTorch versions that don't support weights_only
+            checkpoint = torch.load(filepath, map_location=self.device)
+        except Exception as e:
+            # Handle PyTorch 2.6+ security restrictions and import errors
+            error_str = str(e).lower()
+            if ("unsupported global" in error_str or "weights_only" in error_str or 
+                "no module named" in error_str and "ppo_optimizer" in error_str):
+                logger.warning(f"⚠️ Loading checkpoint with weights_only=False for compatibility: {filepath}")
+                try:
+                    # For trusted checkpoints, we can load with weights_only=False
+                    checkpoint = torch.load(filepath, map_location=self.device, weights_only=False)
+                except Exception as e2:
+                    # If that still fails, try loading with a custom unpickler context
+                    logger.warning(f"⚠️ Standard load failed, trying alternative approach: {e2}")
+                    import pickle
+                    import sys
+                    
+                    # Add the current module to sys.modules as 'ppo_optimizer' to handle legacy checkpoints
+                    sys.modules['ppo_optimizer'] = sys.modules[__name__]
+                    
+                    try:
+                        checkpoint = torch.load(filepath, map_location=self.device, weights_only=False)
+                    finally:
+                        # Clean up the temporary module mapping
+                        if 'ppo_optimizer' in sys.modules:
+                            del sys.modules['ppo_optimizer']
+            else:
+                raise e
         
         self.actor_critic.load_state_dict(checkpoint['actor_critic_state_dict'])
         self.actor_optimizer.load_state_dict(checkpoint['actor_optimizer_state_dict'])
         self.critic_optimizer.load_state_dict(checkpoint['critic_optimizer_state_dict'])
+        
+        # Recreate config from saved parameters if available
+        if 'config_params' in checkpoint:
+            config_params = checkpoint['config_params']
+            # Update current config with saved parameters
+            for key, value in config_params.items():
+                if hasattr(self.config, key):
+                    setattr(self.config, key, value)
+        
         self.exploration_rate = checkpoint['exploration_rate']
         self.total_steps = checkpoint['total_steps']
         
@@ -461,19 +533,24 @@ class GlassProductionPPO:
     
     def get_training_stats(self) -> Dict:
         """Статистика обучения"""
-        if not self.losses:
-            return {}
-        
-        recent_losses = list(self.losses)[-100:]
-        
-        return {
-            'actor_loss': np.mean([l['actor_loss'] for l in recent_losses]),
-            'critic_loss': np.mean([l['critic_loss'] for l in recent_losses]),
-            'avg_episode_reward': np.mean(self.episode_rewards) if self.episode_rewards else 0.0,
+        # Always return basic statistics
+        stats = {
             'exploration_rate': self.exploration_rate,
             'safety_violations': self.safety_violations,
-            'total_steps': self.total_steps
+            'total_steps': self.total_steps,
+            'avg_episode_reward': np.mean(self.episode_rewards) if self.episode_rewards else 0.0
         }
+        
+        # Add loss statistics if available
+        if self.losses:
+            recent_losses = list(self.losses)[-100:]
+            stats['actor_loss'] = np.mean([l['actor_loss'] for l in recent_losses])
+            stats['critic_loss'] = np.mean([l['critic_loss'] for l in recent_losses])
+        else:
+            stats['actor_loss'] = 0.0
+            stats['critic_loss'] = 0.0
+        
+        return stats
 
 
 def create_glass_production_ppo(

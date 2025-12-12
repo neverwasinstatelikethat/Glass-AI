@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from collections import deque, defaultdict
 import pandas as pd
+from scipy import stats
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -52,18 +53,44 @@ class RealTimeFeatureExtractor:
     async def update_with_sensor_data(self, sensor_data: Dict[str, Any]):
         """Update feature extractor with new sensor data"""
         try:
-            timestamp = datetime.fromisoformat(sensor_data.get("timestamp", datetime.utcnow().isoformat()))
+            timestamp_str = sensor_data.get("timestamp")
+            if timestamp_str:
+                timestamp = datetime.fromisoformat(timestamp_str)
+            else:
+                # Use timezone-aware UTC time for consistency
+                from datetime import timezone
+                timestamp = datetime.now(timezone.utc)
             
             # Update timestamp window
             self.timestamp_window.append(timestamp)
             
             # Flatten nested sensor data
             flat_sensors = self._flatten_sensor_data(sensor_data.get("sensors", {}))
+            logger.debug(f"Flattened sensor data contains {len(flat_sensors)} items")
+            # Log some of the flattened sensor data for debugging
+            for key, value in list(flat_sensors.items())[:5]:
+                logger.debug(f"  {key}: {value} (type: {type(value)})")
             
             # Update sensor windows
             for sensor_name, value in flat_sensors.items():
-                if value is not None and not np.isnan(value):
-                    self.sensor_windows[sensor_name].append((timestamp, float(value)))
+                # Skip non-numeric values (like timestamps)
+                if value is not None:
+                    # Additional check for timestamp-like strings
+                    if isinstance(value, str):
+                        # Check if it looks like a timestamp
+                        if (len(value) > 19 and 
+                            (value.count('-') >= 2 or value.count(':') >= 2 or 'T' in value or '+' in value)):
+                            logger.debug(f"Skipping timestamp-like string: {sensor_name} = {value}")
+                            continue
+                    
+                    try:
+                        # Try to convert to float
+                        numeric_value = float(value)
+                        if not np.isnan(numeric_value):
+                            self.sensor_windows[sensor_name].append((timestamp, numeric_value))
+                    except (ValueError, TypeError):
+                        # Skip non-numeric values
+                        logger.debug(f"Skipping non-numeric sensor value: {sensor_name} = {value} (type: {type(value)})")
             
             # Compute derived features
             await self._compute_derived_features(flat_sensors, timestamp)
@@ -71,6 +98,7 @@ class RealTimeFeatureExtractor:
             # Extract features if we have enough data
             if len(self.timestamp_window) >= 10:
                 features = self.extract_features()
+                logger.debug(f"Extracted {len(features)} features")
                 
                 # Call callback if provided
                 if self.feature_callback:
@@ -78,6 +106,7 @@ class RealTimeFeatureExtractor:
                 
                 return features
             
+            logger.debug(f"update_with_sensor_data completed successfully")
             return {}
             
         except Exception as e:
@@ -90,6 +119,10 @@ class RealTimeFeatureExtractor:
         
         def _flatten_recursive(data, prefix=""):
             for key, value in data.items():
+                # Skip timestamp fields and other time-related fields
+                if key.lower() in ["timestamp", "time", "datetime", "date"]:
+                    continue
+                    
                 new_key = f"{prefix}{key}" if prefix else key
                 
                 if isinstance(value, dict):
@@ -100,6 +133,12 @@ class RealTimeFeatureExtractor:
                     else:
                         _flatten_recursive(value, f"{new_key}_")
                 else:
+                    # Skip any value that looks like a timestamp string
+                    if isinstance(value, str):
+                        # Check if it looks like a timestamp
+                        if (len(value) > 19 and 
+                            (value.count('-') >= 2 or value.count(':') >= 2 or 'T' in value)):
+                            continue
                     flat_data[new_key] = value
         
         _flatten_recursive(sensors)
@@ -156,56 +195,73 @@ class RealTimeFeatureExtractor:
     def extract_features(self) -> Dict[str, Any]:
         """Extract all features from current windows"""
         try:
+            # Use timezone-aware UTC time for consistency
+            from datetime import timezone
+            current_time = datetime.now(timezone.utc)
             features = {
-                "timestamp": datetime.utcnow().isoformat(),
-                "extraction_time": datetime.utcnow().isoformat(),
+                "timestamp": current_time.isoformat(),
+                "extraction_time": current_time.isoformat(),
                 "feature_counts": {}
             }
+            logger.debug(f"Starting feature extraction with {len(self.sensor_windows)} sensor windows")
+            # Log some sensor window info for debugging
+            for sensor_name, window in list(self.sensor_windows.items())[:3]:
+                logger.debug(f"  {sensor_name}: {len(window)} values in window")
             
             # Extract statistical features
             stat_features = self._extract_statistical_features()
             features.update(stat_features)
-            features["feature_counts"]["statistical"] = len(stat_features) - 3  # Exclude metadata
+            features["feature_counts"]["statistical"] = len(stat_features)
             
             # Extract temporal features
             temporal_features = self._extract_temporal_features()
             features.update(temporal_features)
-            features["feature_counts"]["temporal"] = len(temporal_features) - len(stat_features)
+            features["feature_counts"]["temporal"] = len(temporal_features)
             
             # Extract frequency features
             frequency_features = self._extract_frequency_features()
             features.update(frequency_features)
-            features["feature_counts"]["frequency"] = len(frequency_features) - len(temporal_features)
+            features["feature_counts"]["frequency"] = len(frequency_features)
             
             # Extract cross-sensor features
             cross_features = self._extract_cross_sensor_features()
             features.update(cross_features)
-            features["feature_counts"]["cross_sensor"] = len(cross_features) - len(frequency_features)
+            features["feature_counts"]["cross_sensor"] = len(cross_features)
             
             # Extract domain-specific features
             domain_features = self._extract_domain_features()
             features.update(domain_features)
-            features["feature_counts"]["domain_specific"] = len(domain_features) - len(cross_features)
+            features["feature_counts"]["domain_specific"] = len(domain_features)
             
             # Add metadata
             features["window_size"] = len(self.timestamp_window)
-            features["data_age_seconds"] = (
-                datetime.utcnow() - min(self.timestamp_window) 
-                if self.timestamp_window else 0
-            ).total_seconds()
+            if self.timestamp_window:
+                # Ensure consistent timezone handling
+                min_timestamp = min(self.timestamp_window)
+                # Use timezone-aware UTC time for consistency
+                from datetime import timezone
+                current_time = datetime.now(timezone.utc)
+                features["data_age_seconds"] = (current_time - min_timestamp).total_seconds()
+            else:
+                features["data_age_seconds"] = 0
             
+            logger.debug(f"Feature extraction completed with {len(features)} total features")
             return features
             
         except Exception as e:
             logger.error(f"❌ Error extracting features: {e}")
+            # Use timezone-aware UTC time for consistency
+            from datetime import timezone
+            current_time = datetime.now(timezone.utc)
             return {
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": current_time.isoformat(),
                 "error": str(e)
             }
     
     def _extract_statistical_features(self) -> Dict[str, float]:
         """Extract statistical features from sensor windows"""
         features = {}
+        logger.debug(f"Extracting statistical features from {len(self.sensor_windows)} sensor windows")
         
         for sensor_name, window in self.sensor_windows.items():
             if len(window) >= 3:
@@ -239,6 +295,7 @@ class RealTimeFeatureExtractor:
                 if np.mean(values) != 0:
                     features[f"{prefix}cv"] = float(np.std(values) / abs(np.mean(values)))
         
+        logger.debug(f"Statistical features extraction completed with {len(features)} features")
         return features
     
     def _extract_temporal_features(self) -> Dict[str, float]:
@@ -493,7 +550,9 @@ async def main_example():
     
     # Generate sample sensor data
     for i in range(20):
-        timestamp = datetime.utcnow()
+        # Use timezone-aware UTC time for consistency
+        from datetime import timezone
+        timestamp = datetime.now(timezone.utc)
         
         sensor_data = {
             "timestamp": timestamp.isoformat(),

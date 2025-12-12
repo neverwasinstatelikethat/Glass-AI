@@ -106,12 +106,13 @@ class SyntheticDataGenerator:
         quality_score = 0.95 + random.uniform(-0.15, 0.05)  # 80-100% quality
         quality_score = max(0.0, min(1.0, quality_score))  # Clamp between 0 and 1
         
-        total_units = random.randint(900, 1100)
+        # Use dynamic units produced based on quality score rather than hardcoded range
+        total_units = max(100, int(quality_score * 1200))  # Scale with quality
         defective_units = int(total_units * (1 - quality_score))
         
         return {
             "timestamp": current_time.isoformat() + "Z",
-            "production_line": "Line_A",
+            "production_line": "Line_ёA",
             "metrics": {
                 "total_units": total_units,
                 "defective_units": defective_units,

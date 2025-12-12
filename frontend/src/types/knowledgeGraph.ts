@@ -1,10 +1,19 @@
+export interface Evidence {
+  type: string;
+  parameter: string;
+  current_value: number;
+  normal_mean: number;
+  deviation_sigma: number;
+  timestamp: string;
+}
+
 export interface Cause {
   cause: string;
   cause_type: string;
   relationship_type: string;
   strength: number;
   confidence: number;
-  evidence: string[];
+  evidence: Evidence[];
   observations: number;
   last_updated: string;
 }
@@ -19,12 +28,16 @@ export interface Recommendation {
   strength: number;
   expected_impact: string;
   priority: string;
+  ml_enhanced?: boolean;
+  ml_confidence?: number;
 }
 
 export interface SubgraphNode {
-  id: number;
+  id: number | string;
   label: string;
   name: string;
+  nodeType: 'defect' | 'cause' | 'parameter' | 'recommendation' | 'human_decision' | 'equipment';
+  confidence: number;
   properties: Record<string, any>;
 }
 

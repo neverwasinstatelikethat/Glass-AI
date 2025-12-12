@@ -357,14 +357,10 @@ const MIREANavigation: React.FC<MIREANavigationProps> = ({ activePage, onPageCha
     const currentActivePage = activePage || location.pathname;
     const navItems = [
         { id: '/', text: 'Главная', icon: <Home />, badge: null, badgeType: null },
-        { id: '/dashboard', text: 'Панель управления', icon: <Dashboard />, badge: null, badgeType: null },
         { id: '/analytics', text: 'Аналитика', icon: <Assessment />, badge: null, badgeType: null },
         { id: '/alerts', text: 'Оповещения', icon: <Warning />, badge: '3', badgeType: 'alert' },
         { id: '/knowledge-graph', text: 'Граф знаний', icon: <Psychology />, badge: 'NEW', badgeType: 'new' },
-        { id: '/3d-view', text: '3D Визуализация', icon: <ThreeDRotation />, badge: 'NEW', badgeType: 'new' },
         { id: '/ar-view', text: 'AR Режим', icon: <Visibility />, badge: 'NEW', badgeType: 'new' },
-        { id: '/ai-insights', text: 'ИИ Аналитика', icon: <Insights />, badge: null, badgeType: null },
-        { id: '/performance', text: 'Производительность', icon: <TrendingUp />, badge: null, badgeType: null },
         { id: '/digital-twin', text: 'Цифровой двойник', icon: <Factory />, badge: null, badgeType: null },
         { id: '/system', text: 'Система', icon: <Memory />, badge: null, badgeType: null },
     ];

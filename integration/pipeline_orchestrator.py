@@ -258,9 +258,8 @@ class PipelineOrchestrator:
             all_features.update(domain_features)
             
             # Statistical features
-            stat_features = self.statistical_features.extract_features(sensor_data)
-            all_features.update(stat_features)
-            
+            stat_features = await self.statistical_features.compute_multivariate_features(sensor_data)
+            all_features.update(stat_features)            
             # Real-time features (if available)
             if self.realtime_features:
                 try:

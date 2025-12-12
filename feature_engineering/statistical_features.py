@@ -445,9 +445,34 @@ class StatisticalFeatureExtractor:
                 else:
                     flat_data[sensor_name] = value
             
-            # Remove None and NaN values
-            valid_data = {k: float(v) for k, v in flat_data.items() 
-                         if v is not None and not np.isnan(v)}
+            # Remove None, NaN, and timestamp-like values
+            valid_data = {}
+            for k, v in flat_data.items():
+                if v is not None:
+                    # Skip timestamp-like strings
+                    if isinstance(v, str):
+                        # Check if it looks like a timestamp (добавлен более строгий паттерн)
+                        if (len(v) > 10 and 
+                            (v.count('-') >= 2 or v.count(':') >= 2 or 'T' in v or '+' in v or 'Z' in v)):
+                            logger.debug(f"Skipping timestamp-like string in multivariate features: {k} = {v}")
+                            continue
+                        # Try to convert string to float
+                        try:
+                            numeric_v = float(v)
+                            # Check for NaN after conversion
+                            if not np.isnan(numeric_v):
+                                valid_data[k] = numeric_v
+                        except (ValueError, TypeError):
+                            logger.debug(f"Skipping non-numeric string value in multivariate features: {k} = {v} ({type(v)})")
+                    else:
+                        # Handle numeric values
+                        try:
+                            # Convert to float and check for NaN
+                            numeric_v = float(v)
+                            if not np.isnan(numeric_v):
+                                valid_data[k] = numeric_v
+                        except (ValueError, TypeError):
+                            logger.debug(f"Skipping non-numeric value in multivariate features: {k} = {v} ({type(v)})")
             
             if len(valid_data) < 2:
                 return {}

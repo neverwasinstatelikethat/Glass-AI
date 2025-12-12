@@ -52,15 +52,33 @@ class GlassProductionFeatureExtractor:
     async def update_with_process_data(self, process_data: Dict[str, Any]):
         """Update domain features with new process data"""
         try:
-            timestamp = datetime.fromisoformat(process_data.get("timestamp", datetime.utcnow().isoformat()))
-            
+            # Use timezone-aware UTC time for consistency
+            from datetime import timezone
+            timestamp_str = process_data.get("timestamp")
+            if timestamp_str:
+                timestamp = datetime.fromisoformat(timestamp_str)
+            else:
+                timestamp = datetime.now(timezone.utc)            
             # Flatten nested process data
             flat_data = self._flatten_process_data(process_data)
             
             # Update process windows
             for key, value in flat_data.items():
-                if value is not None and not np.isnan(value):
-                    self.process_windows[key].append((timestamp, float(value)))
+                if value is not None:
+                    try:
+                        # Skip timestamp-like strings
+                        if isinstance(value, str):
+                            # Check if it looks like a timestamp
+                            if (len(value) > 19 and 
+                                (value.count('-') >= 2 or value.count(':') >= 2 or 'T' in value or '+' in value)):
+                                logger.debug(f"Skipping timestamp-like string: {key} = {value}")
+                                continue
+                        
+                        numeric_value = float(value)
+                        if not np.isnan(numeric_value):
+                            self.process_windows[key].append((timestamp, numeric_value))
+                    except (ValueError, TypeError) as e:
+                        logger.debug(f"Skipping non-numeric value: {key} = {value} ({type(value)})")
             
             # Compute domain-specific features
             features = await self.compute_domain_features(flat_data, timestamp)
@@ -84,6 +102,10 @@ class GlassProductionFeatureExtractor:
         
         def _flatten_recursive(obj, prefix=""):
             for key, value in obj.items():
+                # Skip timestamp fields
+                if key.lower() in ["timestamp", "time", "datetime", "date"]:
+                    continue
+                
                 new_key = f"{prefix}{key}" if prefix else key
                 
                 if isinstance(value, dict):
@@ -92,6 +114,12 @@ class GlassProductionFeatureExtractor:
                     else:
                         _flatten_recursive(value, f"{new_key}_")
                 else:
+                    # Skip any value that looks like a timestamp string
+                    if isinstance(value, str):
+                        # Check if it looks like a timestamp
+                        if (len(value) > 19 and 
+                            (value.count('-') >= 2 or value.count(':') >= 2 or 'T' in value or '+' in value)):
+                            continue
                     flat_data[new_key] = value
         
         _flatten_recursive(data)
@@ -100,9 +128,11 @@ class GlassProductionFeatureExtractor:
     async def compute_domain_features(self, flat_data: Dict[str, float], timestamp: datetime) -> Dict[str, float]:
         """Compute all domain-specific features"""
         try:
+            # Use timezone-aware UTC time for consistency
+            from datetime import timezone
             features = {
                 "timestamp": timestamp.isoformat(),
-                "computation_time": datetime.utcnow().isoformat()
+                "computation_time": datetime.now(timezone.utc).isoformat()
             }
             
             # Melting process features
@@ -137,8 +167,11 @@ class GlassProductionFeatureExtractor:
             
         except Exception as e:
             logger.error(f"❌ Error computing domain features: {e}")
+            # Use timezone-aware UTC time for consistency
+            from datetime import timezone
             return {
                 "timestamp": timestamp.isoformat(),
+                "computation_time": datetime.now(timezone.utc).isoformat(),
                 "error": str(e)
             }
     
@@ -582,7 +615,8 @@ async def main_example():
                 "quality": {
                     "defect_count": int(3 * np.random.random()),                # 0-3 defects
                     "quality_score": 0.92 + (0.08 * (0.5 - np.random.random())), # 0.88-1.00
-                    "production_rate": 1200 + (200 * (0.5 - np.random.random())) # 1100-1300 units/hr
+                    # Use dynamic units produced based on quality score rather than hardcoded values
+                    "production_rate": max(100, int((0.92 + (0.08 * (0.5 - np.random.random()))) * 1200)) # Scale with quality
                 }
             }
         }

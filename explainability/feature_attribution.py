@@ -204,9 +204,32 @@ class EnhancedGlassProductionExplainer:
                         float(input_magnitude[i] + std_val)
                     )
         
-        # Normalize feature importance
+        # Normalize and cap feature importance to prevent overflow
         if result.feature_importance:
-            total_importance = sum(result.feature_importance.values())
+            # Cap extreme values first with proper error handling
+            capped_importance = {}
+            for feature_name, value in result.feature_importance.items():
+                try:
+                    # Ensure value is numeric before clipping
+                    if isinstance(value, (int, float, np.integer, np.floating)):
+                        capped_importance[feature_name] = float(np.clip(float(value), -1000, 1000))
+                    else:
+                        # Try to convert to float
+                        try:
+                            numeric_value = float(value)
+                            capped_importance[feature_name] = float(np.clip(numeric_value, -1000, 1000))
+                        except (ValueError, TypeError):
+                            # Skip non-numeric values
+                            continue
+                except Exception:
+                    # Skip any values that cause errors
+                    continue
+            
+            # Replace the original feature importance with capped values
+            result.feature_importance = capped_importance
+            
+            # Then normalize
+            total_importance = sum(abs(v) for v in result.feature_importance.values())
             if total_importance > 0:
                 for feature_name in result.feature_importance:
                     result.feature_importance[feature_name] /= total_importance
